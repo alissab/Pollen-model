@@ -1,0 +1,813 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<metadata>
+From: &lt;Saved by Windows Internet Explorer 8&gt;
+Subject: World Continents
+Date: Tue, 29 Nov 2011 11:25:07 -0700
+MIME-Version: 1.0
+Content-Type: text/html;
+charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Location: http://maps.rdms.udel.edu/gis/esridata2005/help/world/continent.sdc.htm
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.6157
+
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" =
+"http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd"&gt;
+&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;World Continents&lt;/TITLE&gt;
+&lt;META content=3D"text/html; charset=3DISO-8859-1" =
+http-equiv=3DContent-Type&gt;&lt;LINK=20
+rel=3Dschema.dc href=3D"http://purl.org/metadata/dublin_core"&gt;
+&lt;META name=3Ddc.title content=3D"World Continents "&gt;
+&lt;META name=3Ddc.creator content=3D"ESRI "&gt;
+&lt;META name=3Ddc.subject content=3D"polygon continents coastlines =
+boundaries "&gt;
+&lt;META name=3Ddc.description=20
+content=3D"World Continents represents the boundaries for the continents =
+of the world. "&gt;
+&lt;META name=3Ddc.publisher content=3DESRI&gt;
+&lt;META name=3Ddc.date content=3D20050401&gt;
+&lt;META name=3Ddc.type content=3D"data.vector digital data"&gt;
+&lt;META name=3Ddc.format content=3DSDC&gt;
+&lt;META name=3Ddc.source content=3D"Offline Data"&gt;
+&lt;META name=3Ddc.lang content=3Den&gt;
+&lt;META scheme=3DDD name=3Ddc.coverage.x.min content=3D-180.000000&gt;
+&lt;META scheme=3DDD name=3Ddc.coverage.x.max content=3D180.000000&gt;
+&lt;META scheme=3DDD name=3Ddc.coverage.y.min content=3D-90.000000&gt;
+&lt;META scheme=3DDD name=3Ddc.coverage.y.max content=3D83.623609&gt;
+&lt;META name=3Ddc.coverage.placeName content=3DWorld&gt;
+&lt;META name=3Ddc.coverage.periodName content=3D1996&gt;
+&lt;META name=3Ddc.coverage.periodName content=3D1998&gt;
+&lt;META name=3Ddc.coverage.periodName content=3D2000&gt;
+&lt;META name=3Ddc.rights=20
+content=3D"Access constraints: Access granted to Licensee only.; Use =
+constraints: The data are provided by multiple, third party data vendors =
+under license to ESRI for inclusion on ESRI Data &amp;amp; Maps for use with =
+ESRI=AE software.  Each data vendor has its own data licensing policies =
+and may grant varying redistribution rights to end users. Please consult =
+the redistribution rights below for this data set provided on ESRI Data =
+&amp;amp; Maps. As used herein, =93Geodata=94 shall mean any digital data =
+set consisting of geographic data coordinates and associated =
+attributes."&gt;
+&lt;META name=3DGENERATOR content=3D"MSHTML 8.00.6001.19154"&gt;&lt;/HEAD&gt;
+&lt;BODY&gt;
+&lt;H1&gt;World Continents&lt;/H1&gt;Metadata also available as
+&lt;P&gt;
+&lt;H2&gt;Metadata:&lt;/H2&gt;
+&lt;UL&gt;
+&lt;LI&gt;&lt;A=20
+=
+href=3D"http://maps.rdms.udel.edu/gis/esridata2005/help/world/continent.s=
+dc.htm#1"&gt;Identification_Information&lt;/A&gt;&lt;/LI&gt;
+&lt;LI&gt;&lt;A=20
+=
+href=3D"http://maps.rdms.udel.edu/gis/esridata2005/help/world/continent.s=
+dc.htm#2"&gt;Data_Quality_Information&lt;/A&gt;&lt;/LI&gt;
+&lt;LI&gt;&lt;A=20
+=
+href=3D"http://maps.rdms.udel.edu/gis/esridata2005/help/world/continent.s=
+dc.htm#3"&gt;Spatial_Data_Organization_Information&lt;/A&gt;&lt;/LI&gt;
+&lt;LI&gt;&lt;A=20
+=
+href=3D"http://maps.rdms.udel.edu/gis/esridata2005/help/world/continent.s=
+dc.htm#4"&gt;Spatial_Reference_Information&lt;/A&gt;&lt;/LI&gt;
+&lt;LI&gt;&lt;A=20
+=
+href=3D"http://maps.rdms.udel.edu/gis/esridata2005/help/world/continent.s=
+dc.htm#5"&gt;Entity_and_Attribute_Information&lt;/A&gt;&lt;/LI&gt;
+&lt;LI&gt;&lt;A=20
+=
+href=3D"http://maps.rdms.udel.edu/gis/esridata2005/help/world/continent.s=
+dc.htm#6"&gt;Distribution_Information&lt;/A&gt;&lt;/LI&gt;
+&lt;LI&gt;&lt;A=20
+=
+href=3D"http://maps.rdms.udel.edu/gis/esridata2005/help/world/continent.s=
+dc.htm#7"&gt;Metadata_Reference_Information&lt;/A&gt;&lt;/LI&gt;&lt;/UL&gt;&lt;A=20
+name=3D1&gt;&lt;/A&gt;
+&lt;HR&gt;
+
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Identification_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Citation:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Citation_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Originator:&lt;/EM&gt; ESRI&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Publication_Date:&lt;/EM&gt; 20050401&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Title:&lt;/EM&gt; World Continents&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Edition:&lt;/EM&gt; 2005&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Geospatial_Data_Presentation_Form:&lt;/EM&gt; vector digital =
+data&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Series_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Series_Name:&lt;/EM&gt; ESRI=AE Data &amp;amp; Maps&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Issue_Identification:&lt;/EM&gt; 2005&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Publication_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Publication_Place:&lt;/EM&gt; Redlands, California, USA&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Publisher:&lt;/EM&gt; ESRI&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Other_Citation_Details:&lt;/EM&gt; Location:=20
+\world&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Description:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Abstract:&lt;/EM&gt;=20
+&lt;DD&gt;World Continents represents the boundaries for the continents =
+of the=20
+world. &lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Purpose:&lt;/EM&gt;=20
+&lt;DD&gt;World Continents provides a base map layer of the continents =
+for the=20
+world. &lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Supplemental_Information:&lt;/EM&gt; Largest scale when =
+displaying the=20
+data: 1:15,000,000.&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Time_Period_of_Content:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Time_Period_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Multiple_Dates/Times:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Single_Date/Time:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Calendar_Date:&lt;/EM&gt; 1996&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Single_Date/Time:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Calendar_Date:&lt;/EM&gt; 1998&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Single_Date/Time:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Calendar_Date:&lt;/EM&gt; =
+2000&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Currentness_Reference:&lt;/EM&gt; publication =
+date&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Status:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Progress:&lt;/EM&gt; Complete&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Maintenance_and_Update_Frequency:&lt;/EM&gt; Matches software =
+update=20
+releases&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Spatial_Domain:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Bounding_Coordinates:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;West_Bounding_Coordinate:&lt;/EM&gt; -180.000000&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;East_Bounding_Coordinate:&lt;/EM&gt; 180.000000&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;North_Bounding_Coordinate:&lt;/EM&gt; 83.623609&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;South_Bounding_Coordinate:&lt;/EM&gt; =
+-90.000000&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Keywords:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Theme:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Theme_Keyword_Thesaurus:&lt;/EM&gt; None&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Theme_Keyword:&lt;/EM&gt; polygon&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Theme_Keyword:&lt;/EM&gt; continents&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Theme_Keyword:&lt;/EM&gt; coastlines&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Theme_Keyword:&lt;/EM&gt; boundaries&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Place:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Place_Keyword_Thesaurus:&lt;/EM&gt; None&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Place_Keyword:&lt;/EM&gt; World&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Temporal:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Temporal_Keyword_Thesaurus:&lt;/EM&gt; None&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Temporal_Keyword:&lt;/EM&gt; 1996&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Temporal_Keyword:&lt;/EM&gt; 1998&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Temporal_Keyword:&lt;/EM&gt; 2000&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Access_Constraints:&lt;/EM&gt; Access granted to Licensee =
+only.&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Use_Constraints:&lt;/EM&gt;=20
+&lt;DD&gt;The data are provided by multiple, third party data vendors =
+under=20
+license to ESRI for inclusion on ESRI Data &amp;amp; Maps for use with =
+ESRI=AE=20
+software. Each data vendor has its own data licensing policies and =
+may grant=20
+varying redistribution rights to end users. Please consult the=20
+redistribution rights below for this data set provided on ESRI Data =
+&amp;amp;=20
+Maps. As used herein, =93Geodata=94 shall mean any digital data set =
+consisting=20
+of geographic data coordinates and associated attributes.=20
+&lt;P&gt;The redistribution rights for this data set: Redistribution =
+rights are=20
+granted by the data vendor for hard-copy renditions or static, =
+electronic=20
+map images (e.g. .gif, .jpeg, etc.) that are plotted, printed, or =
+publicly=20
+displayed with proper metadata and source/copyright attribution to =
+the=20
+respective data vendor(s). Geodata is redistributable with a =
+Value-Added=20
+Software Application developed by ESRI Business Partners on a =
+royalty-free=20
+basis with proper metadata and source/copyright attribution to the=20
+respective data vendor(s). Geodata is redistributable without a =
+Value-Added=20
+Software Application (i.e., adding the sample data to an existing,=20
+[non]commercial data set for redistribution) with proper metadata =
+and=20
+source/copyright attribution to the respective data vendor(s).=20
+&lt;P&gt;The terms and conditions below apply to all the data sets =
+provided on=20
+ESRI Data &amp;amp; Maps.=20
+&lt;P&gt;Proprietary Rights and Copyright: Licensee acknowledges that the =
+Data and=20
+Related Materials contain proprietary and confidential property of =
+ESRI and=20
+its licensor(s). The Data and Related Materials are owned by ESRI =
+and its=20
+licensor(s) and are protected by United States copyright laws and =
+applicable=20
+international copyright treaties and/or conventions.=20
+&lt;P&gt;Limited Warranty and Disclaimer: ESRI warrants that the media =
+upon which=20
+the Data and Related Materials are provided will be free from =
+defects in=20
+materials and workmanship under normal use and service for a period =
+of=20
+ninety (90) days from the date of receipt.=20
+&lt;P&gt;THE DATA AND RELATED MATERIALS ARE EXCLUDED FROM THE LIMITED =
+WARRANTY,=20
+AND THE LICENSEE EXPRESSLY ACKNOWLEDGES THAT THE DATA CONTAINS SOME=20
+NONCONFORMITIES, DEFECTS, OR ERRORS. ESRI DOES NOT WARRANT THAT THE =
+DATA=20
+WILL MEET LICENSEE'S NEEDS OR EXPECTATIONS; THAT THE USE OF THE DATA =
+WILL BE=20
+UNINTERRUPTED; OR THAT ALL NONCONFORMITIES, DEFECTS, OR ERRORS CAN =
+OR WILL=20
+BE CORRECTED. ESRI IS NOT INVITING RELIANCE ON THIS DATA, AND THE =
+LICENSEE=20
+SHOULD ALWAYS VERIFY ACTUAL DATA.=20
+&lt;P&gt;EXCEPT FOR THE LIMITED WARRANTY SET FORTH ABOVE, THE DATA AND =
+RELATED=20
+MATERIALS CONTAINED THEREIN ARE PROVIDED "AS-IS," WITHOUT WARRANTY =
+OF ANY=20
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE =
+IMPLIED=20
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.=20
+&lt;P&gt;Exclusive Remedy and Limitation of Liability: The entire =
+liability of=20
+ESRI or its licensor(s) and Licensee's exclusive remedy shall be to=20
+terminate the Agreement upon Licensee returning the Data and Related =
+
+Materials to ESRI with a copy of Licensee's invoice/receipt and ESRI =
+
+returning the license fees paid to Licensee.=20
+&lt;P&gt;IN NO EVENT SHALL ESRI AND/OR ITS LICENSOR(S) BE LIABLE FOR COSTS =
+OF=20
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOST PROFITS, LOST =
+SALES, OR=20
+BUSINESS EXPENDITURES, INVESTMENTS, OR COMMITMENTS IN CONNECTION =
+WITH ANY=20
+BUSINESS; LOSS OF ANY GOODWILL; OR FOR ANY INDIRECT, SPECIAL, =
+INCIDENTAL,=20
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES ARISING OUT OF THIS AGREEMENT OR =
+USE OF=20
+THE DATA AND RELATED MATERIALS, HOWEVER CAUSED, ON ANY THEORY OF =
+LIABILITY,=20
+AND WHETHER OR NOT ESRI OR ITS LICENSOR(S) HAVE BEEN ADVISED OF THE=20
+POSSIBILITY OF SUCH DAMAGE. THESE LIMITATIONS SHALL APPLY =
+NOTWITHSTANDING=20
+ANY FAILURE OF ESSENTIAL PURPOSE OF ANY EXCLUSIVE REMEDY.=20
+&lt;P&gt;Third Party Beneficiary: ESRI's licensor(s) has (have) authorized =
+ESRI to=20
+(sub)distribute and (sub)license its (their) data as incorporated =
+into the=20
+Data and Related Materials. As an intended third party beneficiary =
+to this=20
+Agreement, the ESRI licensor(s) is (are) entitled to directly =
+enforce, in=20
+its own name, the rights and obligations undertaken by the Licensee =
+and to=20
+seek all legal and equitable remedies as are afforded to ESRI.=20
+&lt;P&gt;In the event that the data vendor(s) has (have) granted the end =
+user=20
+permission to redistribute the Geodata, please use proper =
+proprietary or=20
+copyright attribution for the various data vendor(s), and provide =
+the=20
+associated metadata file(s) with the Geodata. In compliance with =
+FGDC=20
+descriptions, and=20
+file names to assist in this effort. &lt;/P&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Point_of_Contact:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Organization_Primary:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Organization:&lt;/EM&gt; ESRI&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Person:&lt;/EM&gt; Data Team&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Address:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Address_Type:&lt;/EM&gt; mailing and physical address&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Address:&lt;/EM&gt; 380 New York Street&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;City:&lt;/EM&gt; Redlands&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;State_or_Province:&lt;/EM&gt; California&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Postal_Code:&lt;/EM&gt; 92373-8100&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Country:&lt;/EM&gt; USA&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Voice_Telephone:&lt;/EM&gt; 909-793-2853&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Facsimile_Telephone:&lt;/EM&gt; 909-793-5953&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Electronic_Mail_Address:&lt;/EM&gt; info@esri.com&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Hours_of_Service:&lt;/EM&gt; 8:00 a.m.=965:30 p.m. Pacific =
+time,=20
+Monday=96Friday&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Instructions:&lt;/EM&gt;=20
+&lt;DD&gt;In the United States=96 Please direct all inquiries =
+regarding=20
+software/data pricing and consulting services to your local ESRI =
+
+Regional Office. For support, you may contact Technical Support =
+by=20
+telephone (voice) between 6:00 a.m. and 5:00 p.m. Pacific time, =
+Monday=20
+through Friday, by dialing 909-793-3774; facsimile (fax) =
+available at=20
+909-792-0960; electronic mail (e-mail) support@esri.com; or =
+visit &lt;A=20
+=
+href=3D"http://support.esri.com/"&gt;&amp;lt;http://support.esri.com&amp;gt;&lt;/A&gt;;=20
+ESRI holidays excluded.=20
+&lt;P&gt;Outside the United States=96 Please direct all inquiries =
+regarding=20
+software/data pricing, sales, support, and consulting services =
+to your=20
+found at=20
+&lt;A=20
+=
+href=3D"http://gis.esri.com/intldist/contactint.cfm"&gt;&amp;lt;http://gis.esri.=
+com/intldist/contactint.cfm&amp;gt;&lt;/A&gt;.=20
+
+&lt;P&gt;For other questions or comments, you may contact ESRI =
+headquarters by=20
+e-mail, telephone, or fax or write to us. =
+&lt;/P&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Native_Data_Set_Environment:&lt;/EM&gt;=20
+&lt;DD&gt;Microsoft Windows 2000 Version 5.0 (Build 2195) Service Pack 3; =
+ESRI=20
+ArcCatalog 8.3.0.800 &lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;A name=3D2&gt;&lt;/A&gt;
+&lt;HR&gt;
+
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Data_Quality_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Logical_Consistency_Report:&lt;/EM&gt;=20
+&lt;DD&gt;No duplicate features are present. The shapefile is converted to =
+SDC=20
+(Smart Data Compression) format in ArcSDE=AE. This verifies and =
+validates the=20
+geometry. The data set is created directly from a topologically =
+correct=20
+ArcInfo=AE coverage. &lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Completeness_Report:&lt;/EM&gt;=20
+&lt;DD&gt;After processing, the data set is checked for drawing display =
+and number=20
+of records and file sizes compared with source materials. &lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Positional_Accuracy:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Horizontal_Positional_Accuracy:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Horizontal_Positional_Accuracy_Report:&lt;/EM&gt;=20
+&lt;DD&gt;The geospatial part of this data set was originally =
+extracted from=20
+the ArcWorld Supplement database and then generalized (tolerance =
+
+unknown). The positional accuracy is unknown. =
+&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Lineage:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Citation:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Citation_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Originator:&lt;/EM&gt; ESRI&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Publication_Date:&lt;/EM&gt; 1996&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Title:&lt;/EM&gt; ArcWorld=99 Supplement&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Edition:&lt;/EM&gt; 1&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Geospatial_Data_Presentation_Form:&lt;/EM&gt; vector =
+digital=20
+data&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Publication_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Publication_Place:&lt;/EM&gt; Redlands, California, =
+USA&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Publisher:&lt;/EM&gt; =
+ESRI&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Scale_Denominator:&lt;/EM&gt; 3000000&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Type_of_Source_Media:&lt;/EM&gt; CD=96ROM&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Time_Period_of_Content:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Time_Period_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Single_Date/Time:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Calendar_Date:&lt;/EM&gt; 1996&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Currentness_Reference:&lt;/EM&gt; publication=20
+date&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Citation_Abbreviation:&lt;/EM&gt; ArcWorld =
+Supplement&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Contribution:&lt;/EM&gt; Attribute and geospatial=20
+data&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Citation:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Citation_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Originator:&lt;/EM&gt; Global Mapping International&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Title:&lt;/EM&gt; Missions Database&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Publication_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Publication_Place:&lt;/EM&gt; Colorado Springs, =
+Colorado,=20
+USA&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Publisher:&lt;/EM&gt; Global Mapping=20
+International&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Type_of_Source_Media:&lt;/EM&gt; CD=96ROM&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Time_Period_of_Content:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Time_Period_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Single_Date/Time:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Calendar_Date:&lt;/EM&gt; 2000&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Currentness_Reference:&lt;/EM&gt; publication=20
+date&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Citation_Abbreviation:&lt;/EM&gt; GMI&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Contribution:&lt;/EM&gt; Attribute data&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Process_Step:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Process_Description:&lt;/EM&gt;=20
+&lt;DD&gt;The following steps were performed by ESRI: Extracted the =
+features=20
+from ESRI Data &amp;amp; Maps 1999 data set-admin98.shp. Updated =
+political=20
+boundaries for countries and first-level administrative units. =
+Used=20
+Continent attribute to dissolve out the necessary features to =
+create the=20
+continents. Removed unnecessary attributes. Created ArcGIS=AE =
+layer file=20
+(.lyr). Created projection file (.prj). Created spatial indices. =
+
+Converted the data set to SDC. &lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Used_Citation_Abbreviation:&lt;/EM&gt; ArcWorld =
+Supplement&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Source_Used_Citation_Abbreviation:&lt;/EM&gt; GMI&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Process_Date:&lt;/EM&gt; 20010111&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Process_Step:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Process_Description:&lt;/EM&gt;=20
+&lt;DD&gt;The following steps were performed by ESRI: Added SQKM =
+<attr>
+and=20
+calculated its values. Added SQMI attribute and calculated its =
+</attr>
+values.=20
+&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Process_Date:&lt;/EM&gt; 20040307&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Process_Step:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Process_Description:&lt;/EM&gt;=20
+&lt;DD&gt;The following steps were performed by ESRI: Removed the =
+Paracel and=20
+Spratly island groups. &lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Process_Date:&lt;/EM&gt; =
+20050211&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;A=20
+name=3D3&gt;&lt;/A&gt;
+&lt;HR&gt;
+
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Spatial_Data_Organization_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Direct_Spatial_Reference_Method:&lt;/EM&gt; Vector&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Point_and_Vector_Object_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;SDTS_Terms_Description:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;SDTS_Point_and_Vector_Object_Type:&lt;/EM&gt; G-polygon&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Point_and_Vector_Object_Count:&lt;/EM&gt;=20
+8&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;A name=3D4&gt;&lt;/A&gt;
+&lt;HR&gt;
+
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Spatial_Reference_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Horizontal_Coordinate_System_Definition:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Geographic:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Latitude_Resolution:&lt;/EM&gt; 0.000009&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Longitude_Resolution:&lt;/EM&gt; 0.000009&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Geographic_Coordinate_Units:&lt;/EM&gt; Decimal =
+degrees&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Geodetic_Model:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Horizontal_Datum_Name:&lt;/EM&gt; D_WGS_1984&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Ellipsoid_Name:&lt;/EM&gt; WGS_1984&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Semi-major_Axis:&lt;/EM&gt; 6378137.000000&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Denominator_of_Flattening_Ratio:&lt;/EM&gt;=20
+298.257224&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;A name=3D5&gt;&lt;/A&gt;
+&lt;HR&gt;
+
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Entity_and_Attribute_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Detailed_Description:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Entity_Type:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Entity_Type_Label:&lt;/EM&gt; continent&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Entity_Type_Definition:&lt;/EM&gt;=20
+&lt;DD&gt;The polygons represent the boundaries for the continents of =
+the=20
+world. &lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Entity_Type_Definition_Source:&lt;/EM&gt; ESRI&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Label:&lt;/EM&gt; ObjectID&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Definition:&lt;/EM&gt; Internal feature number.&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Definition_Source:&lt;/EM&gt; ESRI&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Domain_Values:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Unrepresentable_Domain:&lt;/EM&gt;=20
+&lt;DD&gt;Sequential unique whole numbers that are automatically =
+generated.=20
+&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Label:&lt;/EM&gt; Shape&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Definition:&lt;/EM&gt; Feature geometry.&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Definition_Source:&lt;/EM&gt; ESRI&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Domain_Values:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Unrepresentable_Domain:&lt;/EM&gt; Coordinates defining the=20
+features.&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Label:&lt;/EM&gt; CONTINENT&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Definition:&lt;/EM&gt; The continent name.&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Definition_Source:&lt;/EM&gt; ArcWorld =
+Supplement&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Domain_Values:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Enumerated_Domain:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Enumerated_Domain_Value:&lt;/EM&gt;=20
+&lt;DD&gt;Africa, Antarctica, Asia, Australia, Europe, North =
+America,=20
+Oceania, South America &lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Enumerated_Domain_Value_Definition:&lt;/EM&gt; The =
+continents of=20
+the world.&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Enumerated_Domain_Value_Definition_Source:&lt;/EM&gt; =
+ArcWorld=20
+Supplement&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Label:&lt;/EM&gt; SQMI&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Definition:&lt;/EM&gt; The measure of area in square =
+
+miles.&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Definition_Source:&lt;/EM&gt; ESRI&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Domain_Values:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Unrepresentable_Domain:&lt;/EM&gt; Calculated area for the=20
+features.&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Label:&lt;/EM&gt; SQKM&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Definition:&lt;/EM&gt; The measure of area in square =
+
+kilometers.&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Definition_Source:&lt;/EM&gt; ESRI&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Attribute_Domain_Values:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Unrepresentable_Domain:&lt;/EM&gt; Calculated area for the=20
+features.&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;A =
+name=3D6&gt;&lt;/A&gt;
+&lt;HR&gt;
+
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Distribution_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Distributor:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Organization_Primary:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Organization:&lt;/EM&gt; ESRI; ESRI International=20
+Distributors&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Address:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Address_Type:&lt;/EM&gt; mailing and physical address&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Address:&lt;/EM&gt; 380 New York Street&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;City:&lt;/EM&gt; Redlands&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;State_or_Province:&lt;/EM&gt; California&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Postal_Code:&lt;/EM&gt; 92373-8100&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Country:&lt;/EM&gt; USA&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Voice_Telephone:&lt;/EM&gt; 800-447-9778&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Instructions:&lt;/EM&gt;=20
+&lt;DD&gt;In the United States, contact the ESRI Telesales staff at=20
+800-447-9778 for more information about our software and data.=20
+&lt;P&gt;Outside the United States, please direct all inquiries to =
+your local=20
+ESRI International Distributor. This information can be found at =
+&lt;A=20
+=
+href=3D"http://gis.esri.com/intldist/contactint.cfm"&gt;&amp;lt;http://gis.esri.=
+com/intldist/contactint.cfm&amp;gt;&lt;/A&gt;.=20
+&lt;/P&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Resource_Description:&lt;/EM&gt; Offline Data&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Distribution_Liability:&lt;/EM&gt; See use constraints.&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Standard_Order_Process:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Digital_Form:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Digital_Transfer_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Format_Name:&lt;/EM&gt; SDC&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Format_Specification:&lt;/EM&gt;=20
+&lt;DD&gt;The SDC file contains the geospatial and attribute data. =
+The SDI=20
+file contains the spatial and attribute indexes. The PRJ file =
+contains=20
+the coordinate system information (optional). The XML file =
+(*.sdc.xml)=20
+contains the metadata describing the data set (optional). =
+&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;File_Decompression_Technique:&lt;/EM&gt; ArcGIS=AE =
+software&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Transfer_Size:&lt;/EM&gt; 0.632&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Digital_Transfer_Option:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Offline_Option:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Offline_Media:&lt;/EM&gt; DVD=96ROM&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Recording_Capacity:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Recording_Density:&lt;/EM&gt; 4.38&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Recording_Density_Units:&lt;/EM&gt; GB =
+(gigabytes)&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Recording_Format:&lt;/EM&gt; ISO 9660&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Offline_Option:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Offline_Media:&lt;/EM&gt; CD=96ROM&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Recording_Capacity:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Recording_Density:&lt;/EM&gt; 650&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Recording_Density_Units:&lt;/EM&gt; MB =
+(megabytes)&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Recording_Format:&lt;/EM&gt; ISO =
+9660&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Fees:&lt;/EM&gt; Software purchase price&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Ordering_Instructions:&lt;/EM&gt; ESRI Data &amp;amp; Maps is =
+available only=20
+as part of ESRI=AE software.&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Technical_Prerequisites:&lt;/EM&gt; To use this data requires =
+software=20
+that supports SDC files.&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;A name=3D7&gt;&lt;/A&gt;
+&lt;HR&gt;
+
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Metadata_Reference_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Metadata_Date:&lt;/EM&gt; 20050228&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Metadata_Contact:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Information:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Organization_Primary:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Organization:&lt;/EM&gt; ESRI&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Person:&lt;/EM&gt; Data Team&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Address:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Address_Type:&lt;/EM&gt; mailing and physical address&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Address:&lt;/EM&gt; 380 New York Street&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;City:&lt;/EM&gt; Redlands&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;State_or_Province:&lt;/EM&gt; California&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Postal_Code:&lt;/EM&gt; 92373-8100&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Country:&lt;/EM&gt; USA&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Voice_Telephone:&lt;/EM&gt; 909-793-2853&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Facsimile_Telephone:&lt;/EM&gt; 909-793-5953&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Contact_Electronic_Mail_Address:&lt;/EM&gt; info@esri.com&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Hours_of_Service:&lt;/EM&gt; 8:00 a.m.=965:30 p.m. Pacific =
+time,=20
+Monday=96Friday&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;
+&lt;DT&gt;&lt;EM&gt;Metadata_Standard_Name:&lt;/EM&gt; FGDC Content Standards for =
+Digital=20
+Geospatial Metadata&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Metadata_Standard_Version:&lt;/EM&gt; FGDC-STD-001-1998&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Metadata_Time_Convention:&lt;/EM&gt; local time&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Metadata_Extensions:&lt;/EM&gt;=20
+&lt;DD&gt;
+&lt;DL&gt;
+&lt;DT&gt;&lt;EM&gt;Online_Linkage:&lt;/EM&gt; &lt;A=20
+=
+href=3D"http://www.esri.com/metadata/esriprof80.html"&gt;&amp;lt;http://www.esri=
+.com/metadata/esriprof80.html&amp;gt;&lt;/A&gt;&lt;/DT&gt;
+&lt;DT&gt;&lt;EM&gt;Profile_Name:&lt;/EM&gt; ESRI Metadata =
+Profile&lt;/DT&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;&lt;/DD&gt;&lt;/DL&gt;
+&lt;HR&gt;
+Generated by &lt;A=20
+href=3D"http://geology.usgs.gov/tools/metadata/tools/doc/mp.html"&gt;&lt;TT&gt;mp&lt;=
+/TT&gt;&lt;/A&gt;=20
+version 2.8.6 on Sun Mar 06 11:21:07 2005&lt;BR&gt;&lt;/BODY&gt;&lt;/HTML&gt;
+<Esri><CreaDate>20111129</CreaDate><CreaTime>13442100</CreaTime><SyncOnce>FALSE</SyncOnce><SyncDate>20111207</SyncDate><SyncTime>14164600</SyncTime><ModDate>20111207</ModDate><ModTime>14164600</ModTime><MetaID>{5FFDEA8C-9321-48B4-A99E-ACA605245524}</MetaID></Esri><dataqual><lineage><procstep><procdesc Sync="TRUE">Metadata imported.</procdesc><srcused Sync="TRUE">C:\DOCUME~1\friggens\LOCALS~1\Temp\xml12.tmp</srcused><procdate Sync="TRUE">20111129</procdate><proctime Sync="TRUE">11255700</proctime></procstep><procstep><procdesc Sync="TRUE">Metadata imported.</procdesc><srcused Sync="TRUE">D:\GIS_GPS\a_sevlter_gdb_content_prep\Boundaries\NA_Boundary.shp.xml</srcused><procdate Sync="TRUE">20111129</procdate><proctime Sync="TRUE">12135900</proctime></procstep><procstep><procdesc Sync="TRUE">Metadata imported.</procdesc><srcused Sync="TRUE">D:\GIS_GPS\a_sevlter_gdb_content_prep\Boundaries\NA_Countries_Albers.shp.xml</srcused><procdate Sync="TRUE">20111129</procdate><proctime Sync="TRUE">13442100</proctime></procstep></lineage></dataqual><idinfo><native Sync="TRUE">Microsoft Windows XP Version 5.1 (Build 2600) Service Pack 3; ESRI ArcCatalog 9.3.0.1770</native><descript><langdata Sync="TRUE">en</langdata><abstract>NE_States_Provinces_Albers.shp represents state or province level political boundaries of North America aquired from Natural Earth (http://www.naturalearthdata.com) and projected in the Albers Conical Equal Area coordinate system for optimal appearance in map making. An Albers projection shows areas accurately, but distorts shapes.
+
+Countries distinguish between metropolitan (homeland) and independent and semi-independent portions of sovereign states. If you want to see the dependent overseas regions broken out (like in ISO codes, see France for example), use map units instead.
+
+Each country is coded with a world region that roughly follows the United Nations setup.
+
+Countries are coded with standard ISO and FIPS codes. French INSEE codes are also included.
+
+Includes some thematic data from the United Nations (1), U.S. Central Intelligence Agency, and elsewhere.
+
+Land polygons derived from 10m coastline. Continental polygons broken into smaller, contiguous pieces to avoid having too many points in any one polygon, facilitating faster data processing in certain software applications.</abstract><purpose>Natural Earth was built through a collaboration of many volunteers and is supported by NACIS (North American Cartographic Information Society), and is free for use in any type of project. We provide these boundary files here at SevLTER as a convenience to our GIS user community.</purpose><supplinf>Natural Earth solves a problem: finding suitable data for making small-scale maps. In a time when the web is awash in geospatial data, cartographers are forced to waste time sifting through confusing tangles of poorly attributed data to make clean, legible maps. Because your time is valuable, Natural Earth data comes ready-to-use.</supplinf></descript><citation><citeinfo><origin>Made with Natural Earth</origin><pubdate>2009.12.3 (Thursday, December 3rd, 2009)</pubdate><ftname Sync="TRUE">NA_States_Provinces_Albers</ftname><geoform Sync="TRUE">vector digital data</geoform><edition>1.0.0</edition><title Sync="TRUE">NA_States_Provinces_Albers</title><onlink Sync="TRUE">\\VEGUITA\D$\GIS_GPS\a_sevlter_gdb_content_prep\Boundaries\NA_States_Provinces_Albers.shp</onlink></citeinfo></citation><timeperd><current>publication date</current><timeinfo><sngdate><caldate>2009.12.3 </caldate></sngdate></timeinfo></timeperd><status><progress>Complete</progress><update>None planned</update></status><spdom><bounding><westbc Sync="TRUE">-180.000000</westbc><eastbc Sync="TRUE">180.000000</eastbc><northbc Sync="TRUE">90.000000</northbc><southbc Sync="TRUE">-1.618298</southbc></bounding><lboundng><leftbc Sync="TRUE">-4840686.776957</leftbc><rightbc Sync="TRUE">4013893.206338</rightbc><bottombc Sync="TRUE">-3538791.074383</bottombc><topbc Sync="TRUE">4518092.513718</topbc></lboundng></spdom><keywords><theme><themekt>REQUIRED: Reference to a formally registered thesaurus or a similar authoritative source of theme keywords.</themekt><themekey>North America</themekey><themekey>Boundary</themekey><themekey>Land</themekey><themekey>Continent</themekey><themekey>Polygon</themekey><themekey>States</themekey><themekey>Provinces</themekey></theme><place><placekey>North America</placekey><placekey>Canada</placekey><placekey>United States</placekey><placekey>Mexico</placekey><placekey>Central America</placekey></place></keywords><accconst>none</accconst><useconst>none</useconst><natvform Sync="TRUE">Shapefile</natvform><browse/><datacred>Short text: Made with Natural Earth.
+Long text: Made with Natural Earth. Free vector and raster map data @ naturalearthdata.com.</datacred></idinfo><dataIdInfo><envirDesc Sync="TRUE">Microsoft Windows XP Version 5.1 (Build 2600) Service Pack 3; ESRI ArcCatalog 9.3.0.1770</envirDesc><dataLang><languageCode Sync="TRUE" value="en"></languageCode></dataLang><idCitation><resTitle Sync="TRUE">NA_States_Provinces_Albers</resTitle><presForm><PresFormCd Sync="TRUE" value="005"></PresFormCd></presForm></idCitation><spatRpType><SpatRepTypCd Sync="TRUE" value="001"></SpatRepTypCd></spatRpType><dataExt><geoEle><GeoBndBox esriExtentType="native"><westBL Sync="TRUE">-4840686.776957</westBL><eastBL Sync="TRUE">4013893.206338</eastBL><northBL Sync="TRUE">4518092.513718</northBL><southBL Sync="TRUE">-3538791.074383</southBL><exTypeCode Sync="TRUE">1</exTypeCode></GeoBndBox></geoEle></dataExt><geoBox esriExtentType="decdegrees"><westBL Sync="TRUE">-180</westBL><eastBL Sync="TRUE">180</eastBL><northBL Sync="TRUE">90</northBL><southBL Sync="TRUE">-1.618298</southBL><exTypeCode Sync="TRUE">1</exTypeCode></geoBox></dataIdInfo><metainfo><langmeta Sync="TRUE">en</langmeta><metstdn Sync="TRUE">FGDC Content Standards for Digital Geospatial Metadata</metstdn><metstdv Sync="TRUE">FGDC-STD-001-1998</metstdv><mettc Sync="TRUE">local time</mettc><metc><cntinfo><cntorgp><cntper>REQUIRED: The person responsible for the metadata information.</cntper><cntorg>REQUIRED: The organization responsible for the metadata information.</cntorg></cntorgp><cntaddr><addrtype>REQUIRED: The mailing and/or physical address for the organization or individual.</addrtype><city>REQUIRED: The city of the address.</city><state>REQUIRED: The state or province of the address.</state><postal>REQUIRED: The ZIP or other postal code of the address.</postal></cntaddr><cntvoice>REQUIRED: The telephone number by which individuals can speak to the organization or individual.</cntvoice></cntinfo></metc><metd Sync="TRUE">20111207</metd><metrd>20111129</metrd><metac>none</metac><metuc>none</metuc><metsi><metscs>open to all commers</metscs><metsc>Top secret</metsc><metshd>Red Hot. Use gloves.</metshd></metsi><metextns><onlink Sync="TRUE">http://www.esri.com/metadata/esriprof80.html</onlink><metprof Sync="TRUE">ESRI Metadata Profile</metprof></metextns></metainfo><mdLang><languageCode Sync="TRUE" value="en"></languageCode></mdLang><mdStanName Sync="TRUE">ISO 19115 Geographic Information - Metadata</mdStanName><mdStanVer Sync="TRUE">DIS_ESRI1.0</mdStanVer><mdChar><CharSetCd Sync="TRUE" value="004"></CharSetCd></mdChar><mdHrLv><ScopeCd Sync="TRUE" value="005"></ScopeCd></mdHrLv><mdHrLvName Sync="TRUE">dataset</mdHrLvName><distinfo><resdesc>Downloadable Data. Have at it.</resdesc><stdorder><digform><digtinfo><transize Sync="TRUE">3.192</transize><dssize Sync="TRUE">3.192</dssize></digtinfo></digform></stdorder></distinfo><distInfo><distributor><distorTran><onLineSrc><orDesc Sync="TRUE">002</orDesc><linkage Sync="TRUE">file://\\VEGUITA\D$\GIS_GPS\a_sevlter_gdb_content_prep\Boundaries\NA_States_Provinces_Albers.shp</linkage><protocol Sync="TRUE">Local Area Network</protocol></onLineSrc><transSize Sync="TRUE">3.192</transSize></distorTran><distorFormat><formatName Sync="TRUE">Shapefile</formatName></distorFormat></distributor></distInfo><spdoinfo><direct Sync="TRUE">Vector</direct><ptvctinf><esriterm Name="NA_States_Provinces_Albers"><efeatyp Sync="TRUE">Simple</efeatyp><efeageom Sync="TRUE">Polygon</efeageom><esritopo Sync="TRUE">FALSE</esritopo><efeacnt Sync="TRUE">302</efeacnt><spindex Sync="TRUE">TRUE</spindex><linrefer Sync="TRUE">FALSE</linrefer></esriterm><sdtsterm Name="NA_States_Provinces_Albers"><sdtstype Sync="TRUE">G-polygon</sdtstype><ptvctcnt Sync="TRUE">302</ptvctcnt></sdtsterm></ptvctinf></spdoinfo><spref><horizsys><cordsysn><geogcsn Sync="TRUE">GCS_North_American_1983</geogcsn><projcsn Sync="TRUE">NAD_1983_Albers</projcsn></cordsysn><geodetic><horizdn Sync="TRUE">North American Datum of 1983</horizdn><ellips Sync="TRUE">Geodetic Reference System 80</ellips><semiaxis Sync="TRUE">6378137.000000</semiaxis><denflat Sync="TRUE">298.257222</denflat></geodetic><planar><planci><plance Sync="TRUE">coordinate pair</plance><plandu Sync="TRUE">meters</plandu><coordrep><absres Sync="TRUE">0.000000</absres><ordres Sync="TRUE">0.000000</ordres></coordrep></planci><mapproj><mapprojn Sync="TRUE">Albers Conical Equal Area</mapprojn><albers><stdparll Sync="TRUE">20.000000</stdparll><stdparll Sync="TRUE">60.000000</stdparll><longcm Sync="TRUE">-96.000000</longcm><latprjo Sync="TRUE">40.000000</latprjo><feast Sync="TRUE">0.000000</feast><fnorth Sync="TRUE">0.000000</fnorth></albers></mapproj></planar></horizsys></spref><refSysInfo><RefSystem><refSysID><identCode Sync="TRUE">NAD_1983_Albers</identCode></refSysID></RefSystem></refSysInfo><spatRepInfo><VectSpatRep><topLvl><TopoLevCd Sync="TRUE" value="001"></TopoLevCd></topLvl><geometObjs Name="NA_States_Provinces_Albers"><geoObjTyp><GeoObjTypCd Sync="TRUE" value="001"></GeoObjTypCd></geoObjTyp><geoObjCnt Sync="TRUE">302</geoObjCnt></geometObjs></VectSpatRep></spatRepInfo><eainfo><detailed Name="NA_States_Provinces_Albers"><enttyp><enttypl Sync="TRUE">NA_States_Provinces_Albers</enttypl><enttypt Sync="TRUE">Feature Class</enttypt><enttypc Sync="TRUE">302</enttypc><enttypd>Continental land of North America</enttypd></enttyp><attr><attrlabl Sync="TRUE">FID</attrlabl><attalias Sync="TRUE">FID</attalias><attrtype Sync="TRUE">OID</attrtype><attwidth Sync="TRUE">4</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale><attrdef Sync="TRUE">Internal feature number.</attrdef><attrdefs Sync="TRUE">ESRI</attrdefs><attrdomv><udom Sync="TRUE">Sequential unique whole numbers that are automatically generated.</udom></attrdomv></attr><attr><attrlabl Sync="TRUE">Shape</attrlabl><attalias Sync="TRUE">Shape</attalias><attrtype Sync="TRUE">Geometry</attrtype><attwidth Sync="TRUE">0</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale><attrdef Sync="TRUE">Feature geometry.</attrdef><attrdefs Sync="TRUE">ESRI</attrdefs><attrdomv><udom Sync="TRUE">Coordinates defining the features.</udom></attrdomv></attr><attr><attrlabl Sync="TRUE">OBJECTID</attrlabl><attalias Sync="TRUE">OBJECTID</attalias><attrtype Sync="TRUE">Number</attrtype><attwidth Sync="TRUE">9</attwidth></attr><attr><attrlabl Sync="TRUE">VertexCou</attrlabl><attalias Sync="TRUE">VertexCou</attalias><attrtype Sync="TRUE">Float</attrtype><attwidth Sync="TRUE">19</attwidth><atnumdec Sync="TRUE">11</atnumdec></attr><attr><attrlabl Sync="TRUE">ISO</attrlabl><attalias Sync="TRUE">ISO</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">3</attwidth></attr><attr><attrlabl Sync="TRUE">NAME_0</attrlabl><attalias Sync="TRUE">NAME_0</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">75</attwidth></attr><attr><attrlabl Sync="TRUE">NAME_1</attrlabl><attalias Sync="TRUE">NAME_1</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">75</attwidth></attr><attr><attrlabl Sync="TRUE">VARNAME_1</attrlabl><attalias Sync="TRUE">VARNAME_1</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">150</attwidth></attr><attr><attrlabl Sync="TRUE">NL_NAME_1</attrlabl><attalias Sync="TRUE">NL_NAME_1</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">50</attwidth></attr><attr><attrlabl Sync="TRUE">HASC_1</attrlabl><attalias Sync="TRUE">HASC_1</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">15</attwidth></attr><attr><attrlabl Sync="TRUE">TYPE_1</attrlabl><attalias Sync="TRUE">TYPE_1</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">50</attwidth></attr><attr><attrlabl Sync="TRUE">ENGTYPE_1</attrlabl><attalias Sync="TRUE">ENGTYPE_1</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">50</attwidth></attr><attr><attrlabl Sync="TRUE">VALIDFR_1</attrlabl><attalias Sync="TRUE">VALIDFR_1</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">25</attwidth></attr><attr><attrlabl Sync="TRUE">VALIDTO_1</attrlabl><attalias Sync="TRUE">VALIDTO_1</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">25</attwidth></attr><attr><attrlabl Sync="TRUE">REMARKS_1</attrlabl><attalias Sync="TRUE">REMARKS_1</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">125</attwidth></attr><attr><attrlabl Sync="TRUE">Region</attrlabl><attalias Sync="TRUE">Region</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">100</attwidth></attr><attr><attrlabl Sync="TRUE">RegionVar</attrlabl><attalias Sync="TRUE">RegionVar</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">254</attwidth></attr><attr><attrlabl Sync="TRUE">ProvNumber</attrlabl><attalias Sync="TRUE">ProvNumber</attalias><attrtype Sync="TRUE">Number</attrtype><attwidth Sync="TRUE">4</attwidth></attr><attr><attrlabl Sync="TRUE">NEV_Countr</attrlabl><attalias Sync="TRUE">NEV_Countr</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">100</attwidth></attr><attr><attrlabl Sync="TRUE">FIRST_FIPS</attrlabl><attalias Sync="TRUE">FIRST_FIPS</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">254</attwidth></attr><attr><attrlabl Sync="TRUE">FIRST_HASC</attrlabl><attalias Sync="TRUE">FIRST_HASC</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">254</attwidth></attr><attr><attrlabl Sync="TRUE">FIPS_1</attrlabl><attalias Sync="TRUE">FIPS_1</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">254</attwidth></attr><attr><attrlabl Sync="TRUE">gadm_level</attrlabl><attalias Sync="TRUE">gadm_level</attalias><attrtype Sync="TRUE">Float</attrtype><attwidth Sync="TRUE">19</attwidth><atnumdec Sync="TRUE">11</atnumdec></attr><attr><attrlabl Sync="TRUE">CheckMe</attrlabl><attalias Sync="TRUE">CheckMe</attalias><attrtype Sync="TRUE">Number</attrtype><attwidth Sync="TRUE">4</attwidth></attr><attr><attrlabl Sync="TRUE">Region_Cod</attrlabl><attalias Sync="TRUE">Region_Cod</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">50</attwidth></attr><attr><attrlabl Sync="TRUE">Region_C_1</attrlabl><attalias Sync="TRUE">Region_C_1</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">50</attwidth></attr><attr><attrlabl Sync="TRUE">ScaleRank</attrlabl><attalias Sync="TRUE">ScaleRank</attalias><attrtype Sync="TRUE">Number</attrtype><attwidth Sync="TRUE">4</attwidth></attr><attr><attrlabl Sync="TRUE">Region_C_2</attrlabl><attalias Sync="TRUE">Region_C_2</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">50</attwidth></attr><attr><attrlabl Sync="TRUE">Region_C_3</attrlabl><attalias Sync="TRUE">Region_C_3</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">50</attwidth></attr><attr><attrlabl Sync="TRUE">Country_Pr</attrlabl><attalias Sync="TRUE">Country_Pr</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">128</attwidth></attr><attr><attrlabl Sync="TRUE">DataRank</attrlabl><attalias Sync="TRUE">DataRank</attalias><attrtype Sync="TRUE">Number</attrtype><attwidth Sync="TRUE">4</attwidth></attr><attr><attrlabl Sync="TRUE">LabelRank</attrlabl><attalias Sync="TRUE">LabelRank</attalias><attrtype Sync="TRUE">Number</attrtype><attwidth Sync="TRUE">4</attwidth></attr><attr><attrlabl Sync="TRUE">ADM0_A3</attrlabl><attalias Sync="TRUE">ADM0_A3</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">3</attwidth></attr><attr><attrlabl Sync="TRUE">ABBREV</attrlabl><attalias Sync="TRUE">Abbrev</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">10</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale></attr><attr><attrlabl Sync="TRUE">sameAsCity</attrlabl><attalias Sync="TRUE">sameAsCity</attalias><attrtype Sync="TRUE">Number</attrtype><attwidth Sync="TRUE">4</attwidth></attr><attr><attrlabl Sync="TRUE">POSTAL</attrlabl><attalias Sync="TRUE">Postal</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">10</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale></attr><attr><attrlabl Sync="TRUE">MAP_COLOR</attrlabl><attalias Sync="TRUE">MAP_COLOR</attalias><attrtype Sync="TRUE">Number</attrtype><attwidth Sync="TRUE">4</attwidth></attr><attr><attrlabl Sync="TRUE">AREA_SQKM</attrlabl><attalias Sync="TRUE">Area_sqkm</attalias><attrtype Sync="TRUE">Double</attrtype><attwidth Sync="TRUE">19</attwidth><atprecis Sync="TRUE">0</atprecis><attscale Sync="TRUE">0</attscale></attr><attr><attrlabl Sync="TRUE">Shape_Leng</attrlabl><attalias Sync="TRUE">Shape_Leng</attalias><attrtype Sync="TRUE">Float</attrtype><attwidth Sync="TRUE">19</attwidth><atnumdec Sync="TRUE">11</atnumdec></attr><attr><attrlabl Sync="TRUE">Shape_Area</attrlabl><attalias Sync="TRUE">Shape_Area</attalias><attrtype Sync="TRUE">Float</attrtype><attwidth Sync="TRUE">19</attwidth><attrdef Sync="TRUE">Area of feature in internal units squared.</attrdef><attrdefs Sync="TRUE">ESRI</attrdefs><attrdomv><udom Sync="TRUE">Positive real numbers that are automatically generated.</udom></attrdomv><atnumdec Sync="TRUE">11</atnumdec></attr></detailed></eainfo><mdDateSt Sync="TRUE">20111207</mdDateSt></metadata>
