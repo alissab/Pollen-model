@@ -81,12 +81,13 @@ cat("
     }", 
     file = 'simulate.txt')
 
-results <- run.jags(model = 'simulate.txt', burnin = 2000, sample = 5000, 
+results <- run.jags(model = 'simulate.txt', burnin = 2000, sample = 10000, 
                       adapt = 2000, n.chains = 3, method = 'parallel')
 
 plot(results, 'trace', vars = c("lambda", "eta", "spp.mu"))
 plot(results, 'crosscorr', vars = c("lambda", "eta", "spp.mu"))
 summ <- summary(results)
+# model not able to recover parameters
 
 # extract g estimates from summary
 g_summ <- summ[grep("g\\[", row.names(summ)), ]
@@ -98,7 +99,7 @@ g3 <- g_summ[279:417,]
 plot(g[,1], g1[,4], xlab = "simulated g", ylab = "model estimated g")
 plot(g[,2], g2[,4])
 plot(g[,3], g3[,4])
-
+# gs not recovered
 
 
 # PLOTTING PREDICTIONS
@@ -121,7 +122,7 @@ coordinates(dat_coords) <- dat_coords
 sp::proj4string(dat_coords) <- proj_WGS84
 dat_coords_t <- sp::spTransform(dat_coords, proj_out)
 
-# connect locations with estimates of 'g' for each species
+# connect locations with model estimates of 'g' for each species
 alnus_g <- data.frame(cbind(g1[,4], dat_coords_t@coords))
 bet_g <- data.frame(cbind(g2[,4], dat_coords_t@coords))
 ulm_g <- data.frame(cbind(g3[,4], dat_coords_t@coords))
@@ -129,13 +130,21 @@ colnames(alnus_g)[1] <- "g"
 colnames(bet_g)[1] <- "g"
 colnames(ulm_g)[1] <- "g"
 
+# same thing but with simulated gs
+alnus_g_sim <- data.frame(cbind(g[,1], dat_coords_t@coords))
+bet_g_sim <- data.frame(cbind(g[,2], dat_coords_t@coords))
+ulm_g_sim <- data.frame(cbind(g[,3], dat_coords_t@coords))
+colnames(alnus_g_sim)[1] <- "g"
+colnames(bet_g_sim)[1] <- "g"
+colnames(ulm_g_sim)[1] <- "g"
+
 # read in North America shape files
 na_shp <- readOGR("NA_States_Provinces_Albers.shp", "NA_States_Provinces_Albers")
 na_shp <- sp::spTransform(na_shp, proj_out)
 cont_shp <- subset(na_shp,
                    (NAME_0 %in% c("United States of America", "Mexico", "Canada")))
 
-# plot gs on a map for each taxon
+# plot gs on a map for each taxon for estimated and simulated values
 alnus <- ggplot(data = alnus_g) +
   geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 6) +
   scale_fill_gradient(low = "white", high = "forestgreen") +
@@ -143,7 +152,25 @@ alnus <- ggplot(data = alnus_g) +
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
   scale_y_continuous(limits = c(300000, 1900000)) + 
   scale_x_continuous(limits = c(-800000, 2760000)) +
-  labs(fill = "Alnus \ng param") +
+  labs(fill = "Alnus \ng est") +
+  theme_classic() +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        line = element_blank(),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        plot.title = element_blank()) +
+  coord_fixed()
+
+alnus_sim <- ggplot(data = alnus_g_sim) +
+  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 6) +
+  scale_fill_gradient(low = "white", high = "forestgreen") +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 6) +
+  geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
+  scale_y_continuous(limits = c(300000, 1900000)) + 
+  scale_x_continuous(limits = c(-800000, 2760000)) +
+  labs(fill = "Alnus \ng sim") +
   theme_classic() +
   theme(axis.ticks = element_blank(),
         axis.text = element_blank(),
@@ -161,7 +188,25 @@ bet <- ggplot(data = bet_g) +
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
   scale_y_continuous(limits = c(300000, 1900000)) + 
   scale_x_continuous(limits = c(-800000, 2760000)) +
-  labs(fill = "Betula \ng param") +
+  labs(fill = "Betula \ng est") +
+  theme_classic() +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        line = element_blank(),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        plot.title = element_blank()) +
+  coord_fixed()
+
+bet_sim <- ggplot(data = bet_g_sim) +
+  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 6) +
+  scale_fill_gradient(low = "white", high = "forestgreen") +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 6) +
+  geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
+  scale_y_continuous(limits = c(300000, 1900000)) + 
+  scale_x_continuous(limits = c(-800000, 2760000)) +
+  labs(fill = "Betula \ng sim") +
   theme_classic() +
   theme(axis.ticks = element_blank(),
         axis.text = element_blank(),
@@ -179,7 +224,7 @@ ulm <- ggplot(data = ulm_g) +
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
   scale_y_continuous(limits = c(300000, 1900000)) + 
   scale_x_continuous(limits = c(-800000, 2760000)) +
-  labs(fill = "Ulmus \ng param") +
+  labs(fill = "Ulmus \ng est") +
   theme_classic() +
   theme(axis.ticks = element_blank(),
         axis.text = element_blank(),
@@ -190,7 +235,26 @@ ulm <- ggplot(data = ulm_g) +
         plot.title = element_blank()) +
   coord_fixed()
 
-grid.arrange(alnus, bet, ulm)
+ulm_sim <- ggplot(data = ulm_g_sim) +
+  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 6) +
+  scale_fill_gradient(low = "white", high = "forestgreen") +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 6) +
+  geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
+  scale_y_continuous(limits = c(300000, 1900000)) + 
+  scale_x_continuous(limits = c(-800000, 2760000)) +
+  labs(fill = "Ulmus \ng sim") +
+  theme_classic() +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        line = element_blank(),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        plot.title = element_blank()) +
+  coord_fixed()
+
+grid.arrange(alnus_sim, alnus, bet_sim, bet, ulm_sim, ulm,  
+             nrow = 3, ncol = 2)
 
 
 
