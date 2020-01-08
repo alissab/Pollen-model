@@ -146,9 +146,9 @@ cont_shp <- subset(na_shp,
 
 # plot gs on a map for each taxon for estimated and simulated values
 alnus <- ggplot(data = alnus_g) +
-  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 8) +
   scale_fill_gradient(low = "white", high = "forestgreen") +
-  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 8) +
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
   scale_y_continuous(limits = c(300000, 1900000)) + 
   scale_x_continuous(limits = c(-800000, 2760000)) +
@@ -164,9 +164,9 @@ alnus <- ggplot(data = alnus_g) +
   coord_fixed()
 
 alnus_sim <- ggplot(data = alnus_g_sim) +
-  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 8) +
   scale_fill_gradient(low = "white", high = "forestgreen") +
-  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 8) +
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
   scale_y_continuous(limits = c(300000, 1900000)) + 
   scale_x_continuous(limits = c(-800000, 2760000)) +
@@ -182,9 +182,9 @@ alnus_sim <- ggplot(data = alnus_g_sim) +
   coord_fixed()
 
 bet <- ggplot(data = bet_g) +
-  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 8) +
   scale_fill_gradient(low = "white", high = "forestgreen") +
-  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 8) +
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
   scale_y_continuous(limits = c(300000, 1900000)) + 
   scale_x_continuous(limits = c(-800000, 2760000)) +
@@ -200,9 +200,9 @@ bet <- ggplot(data = bet_g) +
   coord_fixed()
 
 bet_sim <- ggplot(data = bet_g_sim) +
-  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 8) +
   scale_fill_gradient(low = "white", high = "forestgreen") +
-  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 8) +
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
   scale_y_continuous(limits = c(300000, 1900000)) + 
   scale_x_continuous(limits = c(-800000, 2760000)) +
@@ -218,9 +218,9 @@ bet_sim <- ggplot(data = bet_g_sim) +
   coord_fixed()
 
 ulm <- ggplot(data = ulm_g) +
-  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 8) +
   scale_fill_gradient(low = "white", high = "forestgreen") +
-  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 8) +
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
   scale_y_continuous(limits = c(300000, 1900000)) + 
   scale_x_continuous(limits = c(-800000, 2760000)) +
@@ -236,9 +236,9 @@ ulm <- ggplot(data = ulm_g) +
   coord_fixed()
 
 ulm_sim <- ggplot(data = ulm_g_sim) +
-  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y, fill = g), alpha = 0.7, pch = 21, size = 8) +
   scale_fill_gradient(low = "white", high = "forestgreen") +
-  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 8) +
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
   scale_y_continuous(limits = c(300000, 1900000)) + 
   scale_x_continuous(limits = c(-800000, 2760000)) +
@@ -273,9 +273,9 @@ colnames(bet_r)[1] <- "r"
 colnames(ulm_r)[1] <- "r"
 
 alnus <- ggplot(data = aln_r) +
-  geom_point(aes(x = x, y = y, fill = r), alpha = 0.7, pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y, fill = r), alpha = 0.7, pch = 21, size = 8) +
   scale_fill_gradient(low = "white", high = "forestgreen") +
-  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 8) +
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
   scale_y_continuous(limits = c(300000, 1900000)) + 
   scale_x_continuous(limits = c(-800000, 2760000)) +
@@ -291,9 +291,9 @@ alnus <- ggplot(data = aln_r) +
   coord_fixed()
 
 bet <- ggplot(data = bet_r) +
-  geom_point(aes(x = x, y = y, fill = r), alpha = 0.7, pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y, fill = r), alpha = 0.7, pch = 21, size = 8) +
   scale_fill_gradient(low = "white", high = "forestgreen") +
-  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 8) +
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
   scale_y_continuous(limits = c(300000, 1900000)) + 
   scale_x_continuous(limits = c(-800000, 2760000)) +
@@ -309,9 +309,9 @@ bet <- ggplot(data = bet_r) +
   coord_fixed()
 
 ulm <- ggplot(data = ulm_r) +
-  geom_point(aes(x = x, y = y, fill = r), alpha = 0.7, pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y, fill = r), alpha = 0.7, pch = 21, size = 8) +
   scale_fill_gradient(low = "white", high = "forestgreen") +
-  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 6) +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 8) +
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
   scale_y_continuous(limits = c(300000, 1900000)) + 
   scale_x_continuous(limits = c(-800000, 2760000)) +
@@ -327,3 +327,80 @@ ulm <- ggplot(data = ulm_r) +
   coord_fixed()
 
 grid.arrange(alnus, bet, ulm)
+
+
+
+# plotting observed counts
+aln_c <- data.frame(cbind(dat$Alnus, dat_coords_t@coords))
+bet_c <- data.frame(cbind(dat$Betula, dat_coords_t@coords))
+ulm_c <- data.frame(cbind(dat$Ulmus, dat_coords_t@coords))
+colnames(aln_c)[1] <- "c"
+colnames(bet_c)[1] <- "c"
+colnames(ulm_c)[1] <- "c"
+
+aln_c$c <- with(aln_c, ifelse(c > 250, 250, c))
+alnus_ct <- ggplot(data = aln_c) +
+  geom_point(aes(x = x, y = y, fill = c), alpha = 0.7, pch = 21, size = 8) +
+  scale_fill_gradient2(low = "white", mid = "darkolivegreen3", 
+                       high = "forestgreen", midpoint = 150) +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 8) +
+  geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
+  scale_y_continuous(limits = c(300000, 1900000)) + 
+  scale_x_continuous(limits = c(-800000, 2760000)) +
+  labs(fill = "Alnus \nobs count") +
+  theme_classic() +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        line = element_blank(),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        plot.title = element_blank()) +
+  coord_fixed()
+
+bet_c$c <- with(bet_c, ifelse(c > 1000, 1000, c))
+bet_ct <- ggplot(data = bet_c) +
+  geom_point(aes(x = x, y = y, fill = c), alpha = 0.7, pch = 21, size = 8) +
+  scale_fill_gradient2(low = "white", mid = "darkolivegreen3", 
+                       high = "forestgreen", midpoint = 500) +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 8) +
+  geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
+  scale_y_continuous(limits = c(300000, 1900000)) + 
+  scale_x_continuous(limits = c(-800000, 2760000)) +
+  labs(fill = "Betula \nobs count") +
+  theme_classic() +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        line = element_blank(),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        plot.title = element_blank()) +
+  coord_fixed()
+
+ulm_c$c <- with(ulm_c, ifelse(c > 150, 150, c))
+ulm_ct <- ggplot(data = ulm_c) +
+  geom_point(aes(x = x, y = y, fill = c), alpha = 0.7, pch = 21, size = 8) +
+  scale_fill_gradient2(low = "white", mid = "darkolivegreen3", 
+                       high = "forestgreen", midpoint = 75) +
+  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 8) +
+  geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
+  scale_y_continuous(limits = c(300000, 1900000)) + 
+  scale_x_continuous(limits = c(-800000, 2760000)) +
+  labs(fill = "Ulmus \nobs count") +
+  theme_classic() +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        line = element_blank(),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        plot.title = element_blank()) +
+  coord_fixed()
+
+grid.arrange(alnus_ct, bet_ct, ulm_ct)
+
+# grid.arrange(alnus_ct, alnus_sim, alnus, 
+#              bet_ct, bet_sim, bet, 
+#              ulm_ct, ulm_sim, ulm,  
+#              nrow = 3, ncol = 3)
