@@ -1,6 +1,8 @@
 
 require(MASS)
 require(runjags)
+require(ggplot2)
+require(gridExtra)
 
 # modeling simulated data
 # can you recover correct params?
@@ -44,6 +46,10 @@ cat("
     # PRIORS
     lambda ~ dunif(0.01, 10)
     eta ~ dunif(1e-6, 10)
+    
+    for(i in 1:NI){
+    mu[i] ~ dnorm(0, 1e-6)
+    }
 
     # COVARIANCE MATRIX
     for(i in 1:NI){
@@ -61,8 +67,8 @@ cat("
     # LIKELIHOOD
     g[1:NI] ~ dmnorm(mu[1:NI], M.tau[,])
 
-    #data# NI, dist, mu
-    #monitor# lambda, eta, g
+    #data# NI, dist, g
+    #monitor# lambda, eta, mu
     }", 
     file = 'simple.txt')
 
