@@ -7,18 +7,51 @@ require(runjags)
 dat <- readRDS("pollen_data.RData")
 dist <- readRDS("dist_matrix.RData")
 
+# read in North America shape files
+na_shp <- readOGR("NA_States_Provinces_Albers.shp", "NA_States_Provinces_Albers")
+na_shp <- sp::spTransform(na_shp, proj_out)
+cont_shp <- subset(na_shp,
+                   (NAME_0 %in% c("United States of America", "Mexico", "Canada")))
+
+
 Sum_counts <- dat$sum_counts
 mu <- rep(10, 139)
 NI <- length(mu)
-eta <- 0.02
-lambda <- 0.3
-mcov <- eta * exp(-dist/lambda)
+eta <- 2
+lambda <- 20
+
+x = seq(0, max(dist), length=100)
+y = eta*exp(-x*lambda)
+plot(x, y, type="l", xlim=c(0,1))
+
+mcov <- eta * exp(-dist*lambda)
 g <- matrix(nrow = 139, ncol = 1)
 g <- mvrnorm(mu = mu, Sigma = mcov)
 hist(g)
 
 # plot simulated gs to make sure there's spatial correlation
+# PLOTTING PREDICTIONS
+require(raster)
+require(rgdal)
+require(ggplot2)
+require(gridExtra)
+
+proj_out <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5
+  +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"
+
+# WGS84
+proj_WGS84 <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84
+  +towgs84=0,0,0"
+
+# project lat/long from dataframe
+dat_coords <- dat[, c("long","lat")]
+names(dat_coords) <- c("x", "y")
+coordinates(dat_coords) <- dat_coords
+sp::proj4string(dat_coords) <- proj_WGS84
+dat_coords_t <- sp::spTransform(dat_coords, proj_out)
+
 g_plot <- data.frame(cbind(g, dat_coords_t@coords))
+
 
 # plot simulated g values on a map
 sim_plot <- ggplot(data = g_plot) +
@@ -38,17 +71,25 @@ sim_plot <- ggplot(data = g_plot) +
         legend.text = element_text(size = 14),
         plot.title = element_blank()) +
   coord_fixed()
+print(sim_plot)
 
 cat("
     model{
     # PRIORS
-    lambda ~ dunif(0.01, 10)
+    lambda ~ dunif(5, 50)
     eta ~ dunif(1e-6, 10)
+    alpha ~ dnorm(0, 0.001)
 
+
+    for(i in 1:NI){
+      mu[i] <- alpha
+    }
+ 
+   
     # COVARIANCE MATRIX
     for(i in 1:NI){
     for(c in i:NI){
-    M.cov[i,c] <- eta * exp(-dist[i,c] / lambda)
+    M.cov[i,c] <- eta * exp(-dist[i,c]*lambda)
     }}
     
     for(i in 1:NI){
@@ -61,14 +102,14 @@ cat("
     # LIKELIHOOD
     g[1:NI] ~ dmnorm(mu[1:NI], M.tau[,])
 
-    #data# NI, dist, mu
-    #monitor# lambda, eta, g
+    #data# NI, dist, g
+    #monitor# lambda, eta, alpha
     }", 
     file = 'simple.txt')
 
 simple <- run.jags(model = 'simple.txt', burnin = 2000, sample = 5000, 
-                    adapt = 2000, n.chains = 3, method = 'parallel')
-plot(simple, 'trace', vars = c("lambda", "eta"))
+                    adapt = 2000, n.chains = 1)#, method = 'parallel')
+plot(simple, 'trace', vars = c("lambda", "eta", "alpha"))
 simp_summ <- summary(simple)
 g_summ <- simp_summ[3:141,]
 hist(g_summ[,4])
