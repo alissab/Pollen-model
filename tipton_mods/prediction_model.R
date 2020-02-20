@@ -19,7 +19,7 @@ proj_out <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5
 proj_WGS84 <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84
   +towgs84=0,0,0"
 
-na_shp <- readOGR("../NA_States_Provinces_Albers.shp", "NA_States_Provinces_Albers")
+na_shp <- readOGR("NA_States_Provinces_Albers.shp", "NA_States_Provinces_Albers")
 na_shp <- sp::spTransform(na_shp, proj_out)
 cont_shp <- subset(na_shp,
                    (NAME_0 %in% c("United States of America", "Mexico", "Canada")))
@@ -98,14 +98,14 @@ ggplot(data = grid_coords) +
 
 
 # then clip grid coordinates to land (don't estimate pollen in the ocean or lakes)
-lakes_shp <- readOGR("../Great_Lakes.shp", "Great_Lakes")
+lakes_shp <- readOGR("Great_Lakes.shp", "Great_Lakes")
 lakes_shp <- sp::spTransform(lakes_shp, proj_out)
 shp <- rgeos::gDifference(cont_shp, lakes_shp)
 plot(shp)
 
 dat_grid_coords_sp <- SpatialPointsDataFrame(coords = dat_grid_coords[,c('x','y')],
-                                    data = dat_grid_coords[,c('site_ref','Alnus',
-                                                           'Betula','Ulmus')])
+                                             data = dat_grid_coords[,c('site_ref','Alnus',
+                                                                       'Betula','Ulmus')])
 cropped <- raster::intersect(dat_grid_coords_sp, shp)
 cropped <- data.frame(cropped)
 
@@ -143,6 +143,9 @@ Y_with_NAs <- readRDS("Y_with_NAs.RData")
 y <- Y_with_NAs[,c('Alnus','Betula','Ulmus')]
 locs <- Y_with_NAs[,c('x','y')]
 K <- 1000
+
+locs = site_coords[,c('x', 'y')]
+y = as.data.frame(dat[,c('Alnus','Betula','Ulmus')])
 
 ## calculate the Matern correlation using parameters theta on the log scale
 correlation_function <- function(D, theta) {
@@ -215,6 +218,8 @@ mcmc <- function (y, locs, K, message = 100,
   # eta <- matrix(0, N, J-1)
   eta <- array(0, dim = c(K, N, J-1))
   eta[1, , ] <- t(rmvn(J-1, rep(0, N), Sigma_chol, isChol = TRUE))
+  # eta[1, , ] <- t(rmvn(J-1, rep(0, N), Sigma, isChol = FALSE))
+  
   
   ##
   ## initialize omega
@@ -225,20 +230,21 @@ mcmc <- function (y, locs, K, message = 100,
   # IF WE HAVE DATA FOR A LOCATION, DON'T DRAW FROM PG DISTRIBUTION
   # ONLY FOR NA ROWS
   
-  omega <- matrix(0, N, J-1)
+  # omega <- matrix(0, N, J-1)
+  omega <- array(0, dim=c(K, N, J-1))
   for (i in 1:N) {
     for (j in 1:(J-1)) {
-      if (!is.na(Mi[i, j])) {  # ADDED
+      # if (!is.na(Mi[i, j])) {  # ADDED
       if (Mi[i, j] != 0) {
-        omega[i, j] <- pgdraw(Mi[i, j], eta[1, i, j])
+        omega[1, i, j] <- pgdraw(Mi[i, j], eta[1, i, j])
       }
     }
   }
-  }
+  # }
   
   Omega <- vector(mode = "list", length = J-1)
   for (j in 1:(J - 1)) {
-    Omega[[j]] <- diag(omega[, j])
+    Omega[[j]] <- diag(omega[1, , j])
   }
   
   ##
@@ -303,6 +309,7 @@ mcmc <- function (y, locs, K, message = 100,
   message("Starting MCMC, fitting for ", K, " iterations")
   
   for (k in 2:K) {
+    print(paste("Iteration", k, sep=" "))
     # if (k %% message == 0) {
     #   message("Fitting iteration ", k, " out of ", K)
     # }
@@ -311,19 +318,18 @@ mcmc <- function (y, locs, K, message = 100,
     ##
     for (i in 1:N) {
       for (j in 1:(J-1)) {
-        if(!is.na(Mi[i, j])) {
+        # if(!is.na(Mi[i, j])) {
         if(Mi[i, j] != 0){
-          omega[i, j] <- pgdraw(Mi[i, j], eta[k, i, j])  # k
+          omega[k, i, j] <- pgdraw(Mi[i, j], eta[k, i, j])  # k
         }
         else {
-          omega[i, j] <- 0
+          omega[k, i, j] <- 0
         }
-      }
       }
     }
     
     for (j in 1:(J-1)) {
-      Omega[[j]] <- diag(omega[, j])
+      Omega[[j]] <- diag(omega[k, , j])
     }
     
     ##
@@ -348,12 +354,11 @@ mcmc <- function (y, locs, K, message = 100,
     )
     Sigma_star <- tau[k-1]^2 * correlation_function(D, theta_star)  # k-1
     
-    # MAKE SURE IT'S INVERTIBLE
+    # # MAKE SURE IT'S INVERTIBLE
     # diag(Sigma_star) <- NA
     # any(Sigma_star == 0, na.rm = TRUE)   # check if there are off-diagonal zeros
     # Sigma_star <- ifelse(Sigma_star == 0, 0.007, Sigma_star)  # remove them
     # diag(Sigma_star) <- 0
-    
     
     Sigma_chol_star <- chol(Sigma_star)
     Sigma_inv_star <- chol2inv(Sigma_chol_star)
@@ -387,36 +392,35 @@ mcmc <- function (y, locs, K, message = 100,
       Sigma <- Sigma_star
       Sigma_chol <- Sigma_chol_star
       Sigma_inv <- Sigma_inv_star
+      if(k <= adapt) {
+        theta_accept_batch <- theta_accept_batch + 1 / 50
+      } else {
+        theta_accept <- theta_accept + 1 / (K - adapt)
+        theta[k, ] <- theta[k-1, ]  # k, k-1
+      }
+    } else {    # THERE WAS AN ISSUE WITH THIS IF ELSE STATEMENT, I THINK I FIXED IT
+      theta[k, ] <- theta[k- 1, ]
     }
-    if(k <= adapt) {
-      theta_accept_batch <- theta_accept_batch + 1 / 50
-    } else {
-      theta_accept <- theta_accept + 1 / (K - adapt)
-      theta[k, ] <- theta[k-1, ]  # k, k-1
-    }
-    # } else {    # THERE WAS AN ISSUE WITH THIS IF ELSE STATEMENT, I THINK I FIXED IT
-    #   theta[k, ] <- theta[k- 1, ]
-    # }
     
     ## adapt the tuning
     if (k <= adapt) {
-      theta_batch[k %% 50, ] <- theta[k, ]}  # k
-    if (k %% 50 == 0) {
-      out_tuning <- updateTuningMV(
-        k = k,
-        accept = theta_accept_batch,
-        lambda = lambda_theta,
-        batch_samples = theta_batch,
-        Sigma_tune = Sigma_theta_tune,
-        Sigma_tune_chol = Sigma_theta_tune_chol
-      )
-      theta_accept_batch <- out_tuning$accept
-      lambda_theta_tune <- out_tuning$lambda
-      theta_batch <- out_tuning$batch_samples
-      Sigma_theta_tune <- out_tuning$Sigma_tune
-      Sigma_theta_tune_chol <- out_tuning$Sigma_tune_chol
+      theta_batch[k %% 50, ] <- theta[k, ]#}  # k
+      if (k %% 50 == 0) {
+        out_tuning <- updateTuningMV(
+          k = k,
+          accept = theta_accept_batch,
+          lambda = lambda_theta,
+          batch_samples = theta_batch,
+          Sigma_tune = Sigma_theta_tune,
+          Sigma_tune_chol = Sigma_theta_tune_chol
+        )
+        theta_accept_batch <- out_tuning$accept
+        lambda_theta_tune <- out_tuning$lambda
+        theta_batch <- out_tuning$batch_samples
+        Sigma_theta_tune <- out_tuning$Sigma_tune
+        Sigma_theta_tune_chol <- out_tuning$Sigma_tune_chol
+      }
     }
-    # }
     
     ##
     ## sample spatial process variance tau^2
@@ -437,14 +441,19 @@ mcmc <- function (y, locs, K, message = 100,
     list(
       tau = tau,
       theta = theta,
-      eta = eta
+      eta = eta,
+      omega = omega
     )
   )
 }
 
-out <- mcmc(y, locs, K = 500, message = 100)
-out <- readRDS("tipton_mod_with_data.RData")
 
+# locs = locs/max(locs)
+locs_scaled = locs/1e6
+out <- mcmc(y, locs_scaled, K = 50, message = 100)
+
+saveRDS(out, 'tipton_mods_output.RDS')
+# out <- readRDS("tipton_mod_with_data.RData")
 
 
 
