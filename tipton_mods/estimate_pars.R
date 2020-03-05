@@ -137,13 +137,7 @@ require(pgdraw)
 require(fields)
 require(geoR)
 
-# data saved as Y_with_NAs.Rdata
-# called "cropped" in above code
-Y_with_NAs <- readRDS("Y_with_NAs.RData")
-y <- Y_with_NAs[,c('Alnus','Betula','Ulmus')]
-locs <- Y_with_NAs[,c('x','y')]
 K <- 1000
-
 locs = site_coords[,c('x', 'y')]
 y = as.data.frame(dat[,c('Alnus','Betula','Ulmus')])
 
@@ -171,7 +165,7 @@ mcmc <- function (y, locs, K, message = 100,
   J <- ncol(y)
   D <- fields::rdist(locs)
   ########### Calculate Mi ###################
-  Mi <- data.frame(matrix(0, N, J-1))  # DEFINING COUNTS - REWRITING MULTINOMIAL AS PRODUCT OF BINOMIALS (STICK BREAKING ALGORITHM)
+  Mi <- data.frame(matrix(0, N, J-1))
   sumY <- rep(0, times = N)
   cumsumY <- data.frame(matrix(0, N, J-1))
   
@@ -184,7 +178,7 @@ mcmc <- function (y, locs, K, message = 100,
   }
   
   for(i in 1: N){
-    Mi[i,] <- sumY[i] - cumsumY[i,]     # WHAT DOES MI REPRESENT?
+    Mi[i,] <- sumY[i] - cumsumY[i,]
   }
   
   ####################initialize kappa###################
@@ -204,12 +198,6 @@ mcmc <- function (y, locs, K, message = 100,
   theta[1, ] <- c(rmvn(1, theta_mean, diag(theta_sd))) # WHY DIAG? THETA_SD IS A VECTOR?
   
   ## construct Sigma covariance matrix
-  # MAKE SURE IT'S INVERTIBLE
-  diag(D) <- NA
-  any(D == 0, na.rm = TRUE)   # check if there are off-diagonal zeros
-  D <- ifelse(D == 0, 0.007, D)  # remove them
-  diag(D) <- 0
-  
   Sigma <- tau2[1] * correlation_function(D, theta[1, ])
   Sigma_chol <- chol(Sigma)  # WHY DO THEY DO THIS?
   Sigma_inv <- chol2inv(Sigma_chol)  # WHY DO WE WANT THE INVERSE SIGMA?
@@ -224,12 +212,7 @@ mcmc <- function (y, locs, K, message = 100,
   ##
   ## initialize omega
   ##
-  # ADD IF STATEMENT IN THIS BLOCK - IF MI[I,J] IS NA, THEN SKIP IT
-  # DON'T DRAW ANY OMEGA VALUES FOR NA ROWS
-  # ADD IF ELSE STATEMENT ANYWHERE OMEGA IS SAMPLED/ESTIMATED
-  # IF WE HAVE DATA FOR A LOCATION, DON'T DRAW FROM PG DISTRIBUTION
-  # ONLY FOR NA ROWS
-  
+
   # omega <- matrix(0, N, J-1)
   omega <- array(0, dim=c(K, N, J-1))
   for (i in 1:N) {
@@ -320,7 +303,7 @@ mcmc <- function (y, locs, K, message = 100,
       for (j in 1:(J-1)) {
         # if(!is.na(Mi[i, j])) {
         if(Mi[i, j] != 0){
-          omega[k, i, j] <- pgdraw(Mi[i, j], eta[k, i, j])  # k
+          omega[k, i, j] <- pgdraw(Mi[i, j], eta[k, i, j])
         }
         else {
           omega[k, i, j] <- 0
@@ -334,13 +317,12 @@ mcmc <- function (y, locs, K, message = 100,
     
     ##
     ## sample eta
-    # DON'T HAVE TO WORRY ABOUT NAS ANYMORE??
     ##
     for (j in 1:(J-1)) {
       ## can make this much more efficient
       Sigma_tilde <- chol2inv(chol(Sigma_inv + Omega[[j]]))
       mu_tilde <- c(Sigma_tilde %*% (Sigma_inv %*% rep(0, N) + kappa[, j]))
-      eta[k, , j] <- rmvn(1, mu_tilde, Sigma_tilde)  # k
+      eta[k, , j] <- rmvn(1, mu_tilde, Sigma_tilde)
     }
     
     ##
@@ -352,13 +334,7 @@ mcmc <- function (y, locs, K, message = 100,
       sigma = lambda_theta * Sigma_theta_tune_chol,
       isChol = TRUE
     )
-    Sigma_star <- tau[k-1]^2 * correlation_function(D, theta_star)  # k-1
-    
-    # # MAKE SURE IT'S INVERTIBLE
-    # diag(Sigma_star) <- NA
-    # any(Sigma_star == 0, na.rm = TRUE)   # check if there are off-diagonal zeros
-    # Sigma_star <- ifelse(Sigma_star == 0, 0.007, Sigma_star)  # remove them
-    # diag(Sigma_star) <- 0
+    Sigma_star <- tau[k-1]^2 * correlation_function(D, theta_star)
     
     Sigma_chol_star <- chol(Sigma_star)
     Sigma_inv_star <- chol2inv(Sigma_chol_star)
@@ -368,9 +344,9 @@ mcmc <- function (y, locs, K, message = 100,
       sapply(
         1:(J-1),
         function(j) {
-          dmvn(eta[k, , j], rep(0, N), Sigma_chol_star, isChol = TRUE, log = TRUE)  # k
+          dmvn(eta[k, , j], rep(0, N), Sigma_chol_star, isChol = TRUE, log = TRUE)
         }
-      ), na.rm = TRUE  # ADDED THIS ARGUMENT
+      )
     ) +
       
       ## prior
@@ -381,14 +357,14 @@ mcmc <- function (y, locs, K, message = 100,
         function(j) {
           dmvn(eta[k, , j], rep(0, N), Sigma_chol, isChol = TRUE, log = TRUE)  # k
         }
-      ), na.rm = TRUE  # ADDED THIS
+      )
     ) +
       ## prior
       sum(dnorm(theta, theta_mean, theta_sd, log = TRUE))
-    mh <- exp(mh1 - mh2)   # mh IS INF; I THINK THIS IS WHERE ALL THE PROBLEMS START
+    mh <- exp(mh1 - mh2)
     
     if(mh > runif(1, 0, 1)) {
-      theta[k, ] <- theta_star  # k
+      theta[k, ] <- theta_star
       Sigma <- Sigma_star
       Sigma_chol <- Sigma_chol_star
       Sigma_inv <- Sigma_inv_star
@@ -396,15 +372,15 @@ mcmc <- function (y, locs, K, message = 100,
         theta_accept_batch <- theta_accept_batch + 1 / 50
       } else {
         theta_accept <- theta_accept + 1 / (K - adapt)
-        theta[k, ] <- theta[k-1, ]  # k, k-1
+        theta[k, ] <- theta[k-1, ]
       }
-    } else {    # THERE WAS AN ISSUE WITH THIS IF ELSE STATEMENT, I THINK I FIXED IT
+    } else {
       theta[k, ] <- theta[k- 1, ]
     }
     
     ## adapt the tuning
     if (k <= adapt) {
-      theta_batch[k %% 50, ] <- theta[k, ]#}  # k
+      theta_batch[k %% 50, ] <- theta[k, ]#}
       if (k %% 50 == 0) {
         out_tuning <- updateTuningMV(
           k = k,
@@ -425,14 +401,14 @@ mcmc <- function (y, locs, K, message = 100,
     ##
     ## sample spatial process variance tau^2
     ##
-    devs <- kappa - eta[k, , ]  # THESE ARE ALL NAs; ETA[k] ARE ALL NAS  # k
-    SS <- sum(devs * (tau[k-1]^2 * Sigma_inv %*% as.matrix(devs))) # PRODUCES NA SCALAR  # k-1; TRIED ADDING "NA.RM = TRUE"
-    tau2[k] <- 1 / rgamma(1, N * (J - 1) / 2 + alpha_tau,  # [k]
-                          SS / 2 + beta_tau)   # NAS PRODUCED FROM THIS LINE, WARNING MESSAGE
-    tau[k] <- sqrt(tau2[k])  # k, k
-    Sigma <- tau[2]^2 * correlation_function(D, theta[2, ])  # k, k
-    Sigma_chol <- chol(Sigma)  # LEADING MINOR OF ORDER 1 NOT POSITIVE DEFINITE (BECAUSE OF THE NAS PRODUCED IN THE LINE ABOVE?)
-    Sigma_inv <- chol2inv(Sigma_chol)  # non-numeric argument to binary operator
+    devs <- kappa - eta[k, , ]
+    SS <- sum(devs * (tau[k-1]^2 * Sigma_inv %*% as.matrix(devs)))
+    tau2[k] <- 1 / rgamma(1, N * (J - 1) / 2 + alpha_tau,  
+                          SS / 2 + beta_tau)
+    tau[k] <- sqrt(tau2[k])
+    Sigma <- tau[2]^2 * correlation_function(D, theta[2, ])
+    Sigma_chol <- chol(Sigma)
+    Sigma_inv <- chol2inv(Sigma_chol)
   }
   
   message("Acceptance rate for theta is ", theta_accept)
@@ -646,20 +622,4 @@ plot(pis$X2, props$bprop)
 abline(0, 1, col = "red")
 plot(pis$X3, props$uprop)
 abline(0, 1, col = "red")
-
-
-
-
-
-
-
-
-# converting to raster
-# not sure at what point you'd want to do this... after model run, for visualization?
-r <- raster(ncols=70, nrows=25)
-grid_raster <- rasterize(x = grid_coords_cropped, 
-                         y = ,
-                         field = ,
-                         background = NA,
-                         fun = "sum")
 
