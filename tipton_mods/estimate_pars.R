@@ -10,7 +10,7 @@ require(ggplot2)
 
 ## code in part from https://romanabashin.com/how-to-generate-regularly-spaced-points-on-a-map-inside-a-polygon/
 
-dat <- readRDS("pollen_data.RData")
+dat <- readRDS("../pollen_data.RData")
 
 proj_out <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5
   +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"
@@ -19,7 +19,7 @@ proj_out <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5
 proj_WGS84 <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84
   +towgs84=0,0,0"
 
-na_shp <- readOGR("NA_States_Provinces_Albers.shp", "NA_States_Provinces_Albers")
+na_shp <- readOGR("../NA_States_Provinces_Albers.shp", "NA_States_Provinces_Albers")
 na_shp <- sp::spTransform(na_shp, proj_out)
 cont_shp <- subset(na_shp,
                    (NAME_0 %in% c("United States of America", "Mexico", "Canada")))
@@ -98,7 +98,7 @@ ggplot(data = grid_coords) +
 
 
 # then clip grid coordinates to land (don't estimate pollen in the ocean or lakes)
-lakes_shp <- readOGR("Great_Lakes.shp", "Great_Lakes")
+lakes_shp <- readOGR("../Great_Lakes.shp", "Great_Lakes")
 lakes_shp <- sp::spTransform(lakes_shp, proj_out)
 shp <- rgeos::gDifference(cont_shp, lakes_shp)
 plot(shp)
@@ -184,23 +184,29 @@ mcmc <- function (y, locs, K, message = 100,
   ####################initialize kappa###################
   kappa <- data.frame(matrix(0, N, J-1))
   for (i in 1: N) {
-    kappa[i,] <- y[i, 1:(J-1)] - Mi[i, ] / 2  # WHAT IS KAPPA FOR?
+    kappa[i,] <- y[i, 1:(J-1)] - Mi[i, ] / 2 
   }
   
   ## initialize tau2 using an inverse-gamma(1, 1) prior
   tau2 <- rep(0, K)
   tau <- rep(0, K)
-  tau2[1] <- min(1 / rgamma(1, alpha_tau, beta_tau), 10)  # DOES THIS JUST GIVE IT A MAX OF 10?
+  tau2[1] <- min(1 / rgamma(1, alpha_tau, beta_tau), 10)
   tau[1] <- sqrt(tau2[1])
   
   ## initialize theta
   theta <- matrix(0, K, 2)
-  theta[1, ] <- c(rmvn(1, theta_mean, diag(theta_sd))) # WHY DIAG? THETA_SD IS A VECTOR?
+  theta[1, ] <- c(rmvn(1, theta_mean, diag(theta_sd)))
   
   ## construct Sigma covariance matrix
+  # MAKE SURE IT'S INVERTIBLE
+  diag(D) <- NA
+  any(D == 0, na.rm = TRUE)   # check if there are off-diagonal zeros
+  D <- ifelse(D == 0, 0.007, D)  # remove them
+  diag(D) <- 0
+  
   Sigma <- tau2[1] * correlation_function(D, theta[1, ])
-  Sigma_chol <- chol(Sigma)  # WHY DO THEY DO THIS?
-  Sigma_inv <- chol2inv(Sigma_chol)  # WHY DO WE WANT THE INVERSE SIGMA?
+  Sigma_chol <- chol(Sigma)
+  Sigma_inv <- chol2inv(Sigma_chol)
   
   ## don't save eta due to memory constraints for larger datasets
   # eta <- matrix(0, N, J-1)
@@ -217,14 +223,12 @@ mcmc <- function (y, locs, K, message = 100,
   omega <- array(0, dim=c(K, N, J-1))
   for (i in 1:N) {
     for (j in 1:(J-1)) {
-      # if (!is.na(Mi[i, j])) {  # ADDED
       if (Mi[i, j] != 0) {
         omega[1, i, j] <- pgdraw(Mi[i, j], eta[1, i, j])
       }
     }
   }
-  # }
-  
+
   Omega <- vector(mode = "list", length = J-1)
   for (j in 1:(J - 1)) {
     Omega[[j]] <- diag(omega[1, , j])
@@ -322,7 +326,7 @@ mcmc <- function (y, locs, K, message = 100,
       ## can make this much more efficient
       Sigma_tilde <- chol2inv(chol(Sigma_inv + Omega[[j]]))
       mu_tilde <- c(Sigma_tilde %*% (Sigma_inv %*% rep(0, N) + kappa[, j]))
-      eta[k, , j] <- rmvn(1, mu_tilde, Sigma_tilde)
+      eta[k, , j] <- rmvn(1, mu_tilde, Sigma_tilde)  # k
     }
     
     ##
@@ -330,7 +334,7 @@ mcmc <- function (y, locs, K, message = 100,
     ##
     theta_star <- rmvn(
       n = 1,
-      mu = theta[k-1, ],  # k-1
+      mu = theta[k-1, ],
       sigma = lambda_theta * Sigma_theta_tune_chol,
       isChol = TRUE
     )
@@ -346,7 +350,7 @@ mcmc <- function (y, locs, K, message = 100,
         function(j) {
           dmvn(eta[k, , j], rep(0, N), Sigma_chol_star, isChol = TRUE, log = TRUE)
         }
-      )
+      )#, na.rm = TRUE  # ADDED THIS ARGUMENT
     ) +
       
       ## prior
@@ -355,9 +359,9 @@ mcmc <- function (y, locs, K, message = 100,
       sapply(
         1:(J-1),
         function(j) {
-          dmvn(eta[k, , j], rep(0, N), Sigma_chol, isChol = TRUE, log = TRUE)  # k
+          dmvn(eta[k, , j], rep(0, N), Sigma_chol, isChol = TRUE, log = TRUE)
         }
-      )
+      )#, na.rm = TRUE  # ADDED THIS
     ) +
       ## prior
       sum(dnorm(theta, theta_mean, theta_sd, log = TRUE))
@@ -403,7 +407,7 @@ mcmc <- function (y, locs, K, message = 100,
     ##
     devs <- kappa - eta[k, , ]
     SS <- sum(devs * (tau[k-1]^2 * Sigma_inv %*% as.matrix(devs)))
-    tau2[k] <- 1 / rgamma(1, N * (J - 1) / 2 + alpha_tau,  
+    tau2[k] <- 1 / rgamma(1, N * (J - 1) / 2 + alpha_tau,
                           SS / 2 + beta_tau)
     tau[k] <- sqrt(tau2[k])
     Sigma <- tau[2]^2 * correlation_function(D, theta[2, ])
