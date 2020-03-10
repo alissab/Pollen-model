@@ -10,6 +10,7 @@ require(ggplot2)
 
 ## code in part from https://romanabashin.com/how-to-generate-regularly-spaced-points-on-a-map-inside-a-polygon/
 
+#### DATA PREP ####
 dat <- readRDS("../pollen_data.RData")
 
 proj_out <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5
@@ -30,8 +31,12 @@ coordinates(dat_coords) <- dat_coords
 sp::proj4string(dat_coords) <- proj_WGS84
 dat_coords_t <- sp::spTransform(dat_coords, proj_out)
 coords = coordinates(dat_coords_t)
+coords <- data.frame(coords)
 
-# make regularly spaces points across extent
+
+##### CREATING A GRID #####
+# make regularly spaces points across spatial extent which will be used for
+# making predictions
 x_coords <- seq(min(coords[,1]), max(coords[,1]), by = 50000)
 y_coords <- seq(min(coords[,2]), max(coords[,2] + 10000), by = 50000)
 grid_coords <- data.frame(cbind(rep(x_coords, times = 25), rep(y_coords, each = 70)))
@@ -130,6 +135,10 @@ ggplot(data = cropped) +
   coord_fixed()
 
 
+
+
+##### WRITING THE MODEL #####
+
 require(tidyverse)
 require(mvnfast)
 require(splines)
@@ -138,7 +147,7 @@ require(fields)
 require(geoR)
 
 K <- 1000
-locs = site_coords[,c('x', 'y')]
+locs = coords[,c('x', 'y')]
 y = as.data.frame(dat[,c('Alnus','Betula','Ulmus')])
 
 ## calculate the Matern correlation using parameters theta on the log scale
@@ -428,16 +437,16 @@ mcmc <- function (y, locs, K, message = 100,
 }
 
 
-# locs = locs/max(locs)
+#### RUNNING THE MODEL ####
 locs_scaled = locs/1e6
 out <- mcmc(y, locs_scaled, K = 50, message = 100)
+# may need to run "mcmc" function multiple times before it works
 
 saveRDS(out, 'tipton_mods_output.RDS')
 # out <- readRDS("tipton_mod_with_data.RData")
 
 
-
-# summarize process parameter for each site/taxon combination
+#### SUMMARIZE PROCESS PARAMETER ####
 # taxon 1
 t1 <- data.frame(out[["eta"]][,,1])
 t1 <- t1 %>% gather()
@@ -468,26 +477,26 @@ require(raster)
 require(rgdal)
 require(ggplot2)
 
-# getting data ready
-proj_out <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5
-  +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"
-# WGS84
-proj_WGS84 <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84
-  +towgs84=0,0,0"
-na_shp <- readOGR("NA_States_Provinces_Albers.shp", "NA_States_Provinces_Albers")
-na_shp <- sp::spTransform(na_shp, proj_out)
-cont_shp <- subset(na_shp,
-                   (NAME_0 %in% c("United States of America", "Mexico", "Canada")))
+# # getting data ready
+# proj_out <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5
+#   +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"
+# # WGS84
+# proj_WGS84 <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84
+#   +towgs84=0,0,0"
+# na_shp <- readOGR("NA_States_Provinces_Albers.shp", "NA_States_Provinces_Albers")
+# na_shp <- sp::spTransform(na_shp, proj_out)
+# cont_shp <- subset(na_shp,
+#                    (NAME_0 %in% c("United States of America", "Mexico", "Canada")))
 
 # project lat/long from dataframe
-dat <- readRDS("pollen_data.RData")
+# dat <- readRDS("pollen_data.RData")
 
-dat_coords <- dat[, c("long","lat")]
-names(dat_coords) <- c("x", "y")
-coordinates(dat_coords) <- dat_coords
-sp::proj4string(dat_coords) <- proj_WGS84
-dat_coords_t <- sp::spTransform(dat_coords, proj_out)
-coords = coordinates(dat_coords_t)
+# dat_coords <- dat[, c("long","lat")]
+# names(dat_coords) <- c("x", "y")
+# coordinates(dat_coords) <- dat_coords
+# sp::proj4string(dat_coords) <- proj_WGS84
+# dat_coords_t <- sp::spTransform(dat_coords, proj_out)
+# coords = coordinates(dat_coords_t)
 
 dat1 <- data.frame(coords, t1[,c("mean","sd")])
 dat_plot1 <- dat1
@@ -518,7 +527,7 @@ ggplot(data = dat_plot2) +
 
 
 
-# CONVERTING ETAS TO PROPORTIONS
+#### CONVERTING ETAS TO PROPORTIONS AND PLOTTING ####
 # use eta summaries (t1 and t2 from above) and combine taxa into one df
 eta1 <- t1[,"mean"]
 names(eta1) <- "Alnus"
@@ -548,7 +557,7 @@ eta_to_pi <- function(eta) {
 }
 
 pis <- eta_to_pi(etas)
-pis <- pis %>% mutate(sum = rowSums(.))  # check to make sure it worked
+# pis <- pis %>% mutate(sum = rowSums(.))  # check to make sure it worked
 
 
 # PLOT PROPORTIONS
