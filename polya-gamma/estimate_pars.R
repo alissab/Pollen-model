@@ -106,7 +106,7 @@ ggplot(data = grid_coords) +
 
 
 # then clip grid coordinates to land (don't estimate pollen in the ocean or lakes)
-lakes_shp <- readOGR("../Great_Lakes.shp", "Great_Lakes")
+lakes_shp <- readOGR("../data/map-data/Great_Lakes.shp", "Great_Lakes")
 lakes_shp <- sp::spTransform(lakes_shp, proj_out)
 shp <- rgeos::gDifference(cont_shp, lakes_shp)
 plot(shp)
