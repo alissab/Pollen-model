@@ -162,7 +162,14 @@ correlation_function <- function(D, theta) {
 #### RUNNING THE MODEL & SAVING OUTPUT####
 rescale=1e3
 locs_scaled = locs/rescale
-out <- mcmc(y, locs_scaled, K = 5000, message = 100)
+out <- mcmc(y, 
+            locs_scaled, 
+            K = 2000, 
+            message = 100, 
+            mean_nu = -1,
+            sd_nu = 0.3,
+            mean_range = 5,
+            sd_range = 1)
 # may need to run "mcmc" function multiple times before it works
 
 saveRDS(out, 'polya-gamma-posts.RDS')
@@ -354,7 +361,7 @@ grid.arrange(alnus, betula, ulmus, nrow = 3, ncol = 1)
 
 
 # CALCULATE PROPORTIONS OF OBSERVED COUNTS
-props <- dat[,c("Alnus","Betula","Ulmus")]
+props <- dat$y[,c("Alnus","Betula","Ulmus")]
 props <- props %>% mutate(sum = rowSums(.))
 props <- props %>% mutate(aprop = Alnus/sum, bprop = Betula/sum, uprop = Ulmus/sum)
 
