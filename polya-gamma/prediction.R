@@ -1,6 +1,12 @@
-out = readRDS('tipton_mods_output.RDS')
-rescale = 1e6
+library(reshape2)
+require(rdist)
+require(rgeos)
+require(ggplot2)
+require(sp)
+require(rgdal)
+library(raster)
 
+#### READ MAP DATA ####
 # getting data ready
 proj_out <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5
   +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"
@@ -8,88 +14,118 @@ proj_out <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5
 proj_WGS84 <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84
   +towgs84=0,0,0"
 
-na_shp <- readOGR("NA_States_Provinces_Albers.shp", "NA_States_Provinces_Albers")
+na_shp <- readOGR("../data/map-data/NA_States_Provinces_Albers.shp", "NA_States_Provinces_Albers")
 na_shp <- sp::spTransform(na_shp, proj_out)
 cont_shp <- subset(na_shp,
                    (NAME_0 %in% c("United States of America", "Mexico", "Canada")))
 
+#### READ IN MODEL DATA AND OUTPUT ####
+out = readRDS('polya-gamma-posts.RDS')
+dat = readRDS('polya-gamma-dat.RDS')
 
+# note that locations were scaled to fit the model
+# unscaling to think in meters, then will rescale again before prediction
+rescale = dat$rescale
+locs_pollen <- dat$locs*rescale 
+names(locs_pollen) <- c("x", "y")
 
-# data saved as Y_with_NAs.Rdata
-# called "cropped" in above code
-Y_with_NAs <- readRDS("Y_with_NAs.RData")
-# y <- Y_with_NAs[,c('Alnus','Betula','Ulmus')]
-locs_grid <- Y_with_NAs[,c('x','y')]
-# K <- 1000
+y = dat$y
 
-# read in pollen data
-dat <- readRDS("pollen_data.RData")
-dat_coords <- dat[, c("long","lat")]
-names(dat_coords) <- c("x", "y")
-coordinates(dat_coords) <- dat_coords
-sp::proj4string(dat_coords) <- proj_WGS84
-dat_coords_t <- sp::spTransform(dat_coords, proj_out)
-coords = coordinates(dat_coords_t)
+#### CONSTRUCT GRID ####
+# function to construct a raster grid
+# take in bounding box for grid, resolution in m, and projection
+build_grid <- function(veg_box, resolution = 8000, proj = '+init=epsg:3175') {
+  raster::raster(xmn = veg_box[1],
+                 xmx = veg_box[3],
+                 ymn = veg_box[2],
+                 ymx = veg_box[4],
+                 resolution = resolution,
+                 crs = proj)
+}
 
-# make regularly spaces points across extent
-x_coords <- seq(min(coords[,1]), max(coords[,1]), by = 50000)
-y_coords <- seq(min(coords[,2]), max(coords[,2] + 10000), by = 50000)
-grid_coords <- data.frame(cbind(rep(x_coords, times = 25), rep(y_coords, each = 70)))
-names(grid_coords) <- c("x", "y")
-site_coords <- coords
-site_coords <- as.matrix(site_coords)
-locs_pollen = site_coords[,c('x', 'y')]
-y = as.data.frame(dat[,c('Alnus','Betula','Ulmus')])
+bbox_tran <- function(x, coord_formula = '~ x + y', from, to) {
+
+  sp::coordinates(x) <- formula(coord_formula)
+  sp::proj4string(x) <- sp::CRS(from)
+  bbox <- as.vector(sp::bbox(sp::spTransform(x, CRSobj = sp::CRS(to))))
+  return(bbox)
+}
+# get bounding box from pollen record coordinates
+pol_box <- bbox_tran(locs_pollen, '~ x + y',
+                     '+init=epsg:3175',
+                     '+init=epsg:3175')
+
+# build the raster grid
+# 40 km grid cells
+reconst_grid <- build_grid(pol_box,
+                           resolution = 40000,
+                           proj = '+init=epsg:3175')
+
+# want to work with a data frame not a raster
+reconst_grid = as.data.frame(reconst_grid, xy=TRUE)
+
+locs_grid = reconst_grid[,1:2]
+
+# # make regularly spaces points across extent
+# x_coords <- seq(min(locs_pollen[,1]), max(locs_pollen[,1]), by = 50000)
+# y_coords <- seq(min(locs_pollen[,2]), max(locs_pollen[,2] + 10000), by = 50000)
+# locs_grid <- data.frame(cbind(rep(x_coords, times = 25), rep(y_coords, each = 70)))
+# names(locs_grid) <- c("x", "y")
 
 N_grid = nrow(locs_grid)
 N_cores = nrow(locs_pollen)
 
-D_pollen <- fields::rdist(locs_pollen)/rescale # N_cores x N_cores
+#### DISTANCE MATRICES ####
+D_pollen <- fields::rdist(locs_pollen/rescale)# N_cores x N_cores
+# D_pollen <- rdist(as.matrix(locs_pollen/rescale))# N_cores x N_cores
 any(D_pollen == 0, na.rm = TRUE)   # check if there are off-diagonal zeros
 D_pollen <- ifelse(D_pollen == 0, 0.007, D_pollen)  # remove them
 diag(D_pollen) <- 0
 
-D_grid   <- fields::rdist(locs_grid)/rescale # N_locs x N_locs
+# D_grid   <- fields::rdist(locs_grid/rescale) # N_locs x N_locs
+D_grid   <- fields::rdist(locs_grid/rescale) # N_locs x N_locs
 any(D_grid == 0, na.rm = TRUE)   # check if there are off-diagonal zeros
 D_grid <- ifelse(D_grid == 0, 0.007, D_grid)  # remove them
 diag(D_grid) <- 0
 
-D_inter   <- fields::rdist(locs_grid, locs_pollen)/rescale # N_locs x N_cores
+D_inter   <- fields::rdist(as.matrix(locs_grid/rescale), as.matrix(locs_pollen/rescale)) # N_locs x N_cores
+D_inter   <- cdist(as.matrix(locs_grid/rescale), as.matrix(locs_pollen/rescale)) # N_locs x N_cores
 any(D_inter == 0, na.rm = TRUE)   # check if there are off-diagonal zeros
 D_inter <- ifelse(D_inter == 0, 0.007, D_inter)  # remove them
-diag(D_inter) <- 0
 
+foo=as.matrix(locs_grid/rescale)
+plot(foo[,1],foo[,2])
+bar=as.matrix(locs_pollen/rescale)
+points(bar[,1], bar[,2], col="blue", pch=19)
+
+check = apply(D_inter, 2, function(x) which.min(x))
+
+#### PREDICTIONS ####
 N_iter = length(out$tau)
 J = dim(out$eta)[3] + 1
 
+burn = 500
+N_keep = N_iter-burn+1
 
-########### Calculate Mi ###################
-Mi <- data.frame(matrix(0, N_cores, J-1))  # DEFINING COUNTS - REWRITING MULTINOMIAL AS PRODUCT OF BINOMIALS (STICK BREAKING ALGORITHM)
-sumY <- rep(0, times = N_cores)
-cumsumY <- data.frame(matrix(0, N_cores, J-1))
+tau   = out$tau[burn:N_iter]
+theta = out$theta[burn:N_iter,]
+omega = out$omega[burn:N_iter,,]
+eta   = out$eta[burn:N_iter,,]
 
-for(i in 1: N_cores){
-  sumY[i] <- sum(y[i, ])
-}
+# check process estimates
+eta_mean = apply(eta, c(2,3), median)
+eta_mean = data.frame(locs_pollen, eta_mean)
+plot(eta_mean[,'y'], eta_mean[,'X1'])
+eta_melt = melt(eta_mean, id.vars=c('x', 'y'))
 
-for(i in 1: N_cores){
-  cumsumY[i,] <- c(0, cumsum(y[i,1:(J-2)]))
-}
+# this looks okay
+ggplot(data=eta_melt) + 
+  geom_point(aes(x=x, y=y, fill=value, color=value)) + 
+  facet_wrap(~variable) +
+  scale_colour_gradientn(colours = terrain.colors(10)) + 
+  scale_fill_gradientn(colours = terrain.colors(10)) + 
+  coord_equal()
 
-for(i in 1: N_cores){
-  Mi[i,] <- sumY[i] - cumsumY[i,]     # WHAT DOES MI REPRESENT?
-}
-
-####################initialize kappa###################
-kappa <- data.frame(matrix(0, N_cores, J-1))
-for (i in 1: N_cores) {
-  kappa[i,] <- y[i, 1:(J-1)] - Mi[i, ] / 2  # WHAT IS KAPPA FOR?
-}
-
-tau = out$tau
-theta = out$theta
-omega = out$omega
-eta = out$eta
 
 ## calculate the Matern correlation using parameters theta on the log scale
 correlation_function <- function(D, theta) {
@@ -97,57 +133,127 @@ correlation_function <- function(D, theta) {
 }
 
 
-eta_preds <- array(0, dim=c(N_grid, J-1, N_iter))
-for (i in 1:N_iter){
+
+eta_preds <- array(0, dim=c(N_grid, J-1, N_keep))
+for (i in 1:N_keep){
+# for (i in 1:1){
   print(i)
-  Sigma_pol   = tau[i]^2*correlation_function(D_pollen, theta[i, ])
-  Sigma_inter = tau[i]^2*correlation_function(D_inter, theta[i, ])
+  # Sigma_pol   = tau[i]^2*correlation_function(D_pollen, theta[i, ])
+  # Sigma_inter = tau[i]^2*correlation_function(D_inter, theta[i, ])
   
-  Sigma_pol_chol <- chol(Sigma_pol)  # WHY DO THEY DO THIS?
-  Sigma_pol_inv <- chol2inv(Sigma_pol_chol) 
+  # but tau^2 cancels in the calculation below
+  Sigma_pol   = correlation_function(D_pollen, theta[i, ])
+  Sigma_inter = correlation_function(D_inter, theta[i, ])
   
-  mu = c(0,0)
+  # Sigma_pol_chol <- chol(Sigma_pol)
+  # Sigma_pol_inv1 <- chol2inv(Sigma_pol_chol)
+  Sigma_pol_inv2 <- solve(Sigma_pol) 
+  
+  mu1 = c(0,0)
+  mu2 = c(0,0)
   
   for (j in 1:(J-1)){
-    y_SB = eta[i,,j] - mu[j]#mu_tilde
-    
-    eta_preds[,j,i] = mu[j] + Sigma_inter %*% solve(Sigma_pol) %*% y_SB  
+    y_SB = eta[i,,j] #- mean(eta[i,,j]) 
+    #eta_preds[,j,i] = mu2[j] + Sigma_inter %*% Sigma_pol_inv2 %*% y_SB  
+    eta_preds[,j,i] = Sigma_inter %*% Sigma_pol_inv2 %*% y_SB 
   }
 }
 
 
-# function to convert eta to pi (proportions)
-expit <- function(x) {
-  1 / (1 + exp(-x))
-}
+# checking first iter
+eta_preds_real = eta_preds[,,1]
+eta_preds_real = data.frame(locs_grid, eta_preds_real)
+eta_preds_real_melt = melt(eta_preds_real, id.vars=c('x', 'y'))
+ggplot(data=eta_preds_real_melt) + 
+  geom_point(aes(x=x, y=y, fill=value, color=value)) + 
+  facet_wrap(~variable) +
+  scale_colour_gradientn(colours = terrain.colors(10)) + 
+  scale_fill_gradientn(colours = terrain.colors(10)) + 
+  coord_equal()
 
-eta_to_pi <- function(eta) {
-  ## convert eta to a probability vector pi
-  ## can make this more general by first checking if vector vs. matrix and then
-  ## calculating the response
-  N <- nrow(eta)
-  J <- ncol(eta) + 1
-  pi <- matrix(0, N, J)
-  stick <- rep(1, N)
-  for (j in 1:(J - 1)) {
-    pi[, j] <- expit(eta[, j]) * stick
-    stick <- stick - pi[, j]
+# check process estimates on grid
+eta_preds_mean = apply(eta_preds, c(1,2), median)
+eta_preds_mean = data.frame(locs_grid, eta_preds_mean)
+
+# 
+eta_preds_melt = melt(eta_preds_mean, id.vars=c('x', 'y'))
+
+# something is fucked up here
+ggplot(data=eta_preds_melt) + 
+  geom_point(aes(x=x, y=y, fill=value, color=value)) + 
+  facet_wrap(~variable) +
+  scale_colour_gradientn(colours = terrain.colors(10)) + 
+  scale_fill_gradientn(colours = terrain.colors(10)) + 
+  coord_equal()
+
+#### PREDICTED PROPROTIONS ####
+# # function to convert eta to pi (proportions)
+# expit <- function(x) {
+#   1 / (1 + exp(-x))
+# }
+# 
+# eta_to_pi <- function(eta) {
+#   ## convert eta to a probability vector pi
+#   ## can make this more general by first checking if vector vs. matrix and then
+#   ## calculating the response
+#   N <- nrow(eta)
+#   J <- ncol(eta) + 1
+#   pi <- matrix(0, N, J)
+#   stick <- rep(1, N)
+#   for (j in 1:(J - 1)) {
+#     pi[, j] <- expit(eta[, j]) * stick
+#     stick <- stick - pi[, j]
+#   }
+#   pi[, J] <- stick
+#   return(pi)
+# }
+
+# pi_preds = array(NA, dim=c(N_grid, J, N_keep))
+# for (i in 1:N_keep){
+#   pi_preds[,,i] <- eta_to_pi(eta_preds[,,i])
+#   # pis <- pis %>% mutate(sum = rowSums(.))  # check to make sure it worked
+# }
+
+eta2pi <- function(eta_preds){
+  dims = dim(eta_preds)
+  N_grid = dims[1]
+  J = dims[2] 
+  N_keep = dims[3]
+  
+  pi_preds = array(NA, dim=c(N_grid, J+1, N_keep))
+  exp_eta = exp(eta_preds)
+  sum_exp = apply(exp_eta, c(1, 3), sum)
+  
+  for (i in 1:N_keep){
+    for (j in 1:J){
+      pi_preds[,j,i] = exp_eta[,j,i]/(1+ sum_exp[,i])
+    }
+    pi_preds[, J+1, i] = 1/(1+ sum_exp[,i])
   }
-  pi[, J] <- stick
-  return(pi)
+  
+  return(pi_preds)
 }
 
-pi_preds = array(NA, dim=c(N_grid, J, N_iter))
-for (i in 1:N_iter){
-  pi_preds[,,i] <- eta_to_pi(eta_preds[,,i])
-  # pis <- pis %>% mutate(sum = rowSums(.))  # check to make sure it worked
-}
+pi_preds = eta2pi(eta_preds)
 
 pi_mean = apply(pi_preds, c(1,2), mean, na.rm=TRUE)
 colnames(pi_mean) = c('T1', 'T2', 'T3')
 
+
+preds = data.frame(locs_grid, pi_mean)
+
+preds_melt = melt(preds, id.vars=c('x', 'y'))
+
+ggplot(data=preds_melt) + 
+  geom_point(aes(x=x, y=y, fill=value, color=value)) + 
+  scale_colour_gradientn(colours = terrain.colors(10)) + 
+  scale_fill_gradientn(colours = terrain.colors(10)) + 
+  facet_wrap(~variable) + 
+  coord_equal()
+
+
 library(maptools)
-source('pie_maps.R')
+source('../source/pie_maps.R')
 
 xlo = min(locs_grid[,'x'])
 xhi = max(locs_grid[,'x'])
@@ -171,26 +277,49 @@ pieMap(proportions = pi_mean,
        main_title='',
        cont_shp=cont_shp)
 
-# plot simulated r values on a map
-r_dat = data.frame(locs_grid, pi_mean)
-r_melt = melt(r_dat, id.var=c('x', 'y'))
+# # plot simulated r values on a map
+# r_dat = data.frame(locs_grid, pi_mean)
+# r_melt = melt(r_dat, id.var=c('x', 'y'))
+# 
+# sim_plot <- ggplot(data = r_melt) +
+#   geom_point(aes(x = x, y = y, fill = value), alpha = 0.7, pch = 21, size = 1) +
+#   scale_fill_gradient(low = "white", high = "forestgreen") +
+#   geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 1) +
+#   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
+#   scale_y_continuous(limits = c(300000, 1900000)) + 
+#   scale_x_continuous(limits = c(-800000, 2760000)) +
+#   labs(fill = "sim data") +
+#   theme_classic() +
+#   theme(axis.ticks = element_blank(),
+#         axis.text = element_blank(),
+#         axis.title = element_blank(),
+#         line = element_blank(),
+#         legend.title = element_text(size = 16),
+#         legend.text = element_text(size = 14),
+#         plot.title = element_blank()) +
+#   coord_fixed() +
+#   facet_wrap(.~variable)
+# print(sim_plot)
 
-sim_plot <- ggplot(data = r_melt) +
-  geom_point(aes(x = x, y = y, fill = value), alpha = 0.7, pch = 21, size = 1) +
-  scale_fill_gradient(low = "white", high = "forestgreen") +
-  geom_point(aes(x = x, y = y), color = 'black', pch = 21, size = 1) +
-  geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
-  scale_y_continuous(limits = c(300000, 1900000)) + 
-  scale_x_continuous(limits = c(-800000, 2760000)) +
-  labs(fill = "sim data") +
-  theme_classic() +
-  theme(axis.ticks = element_blank(),
-        axis.text = element_blank(),
-        axis.title = element_blank(),
-        line = element_blank(),
-        legend.title = element_text(size = 16),
-        legend.text = element_text(size = 14),
-        plot.title = element_blank()) +
-  coord_fixed() +
-  facet_wrap(.~variable)
-print(sim_plot)
+# ########### Calculate Mi ###################
+# Mi <- data.frame(matrix(0, N_cores, J-1))  # DEFINING COUNTS - REWRITING MULTINOMIAL AS PRODUCT OF BINOMIALS (STICK BREAKING ALGORITHM)
+# sumY <- rep(0, times = N_cores)
+# cumsumY <- data.frame(matrix(0, N_cores, J-1))
+# 
+# for(i in 1: N_cores){
+#   sumY[i] <- sum(y[i, ])
+# }
+# 
+# for(i in 1: N_cores){
+#   cumsumY[i,] <- c(0, cumsum(y[i,1:(J-2)]))
+# }
+# 
+# for(i in 1: N_cores){
+#   Mi[i,] <- sumY[i] - cumsumY[i,]     # WHAT DOES MI REPRESENT?
+# }
+# 
+# ####################initialize kappa###################
+# kappa <- data.frame(matrix(0, N_cores, J-1))
+# for (i in 1: N_cores) {
+#   kappa[i,] <- y[i, 1:(J-1)] - Mi[i, ] / 2  # WHAT IS KAPPA FOR?
+# }
