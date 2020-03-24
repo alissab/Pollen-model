@@ -7,6 +7,7 @@ require(rgdal)
 require(rdist)
 require(rgeos)
 require(ggplot2)
+require(invgamma)
 
 ## code in part from https://romanabashin.com/how-to-generate-regularly-spaced-points-on-a-map-inside-a-polygon/
 
@@ -164,14 +165,12 @@ rescale=1e3
 locs_scaled = locs/rescale
 out <- mcmc(y, 
             locs_scaled, 
-            K = 2000, 
+            K = 10000, 
             message = 100, 
             mean_nu = -1,
             sd_nu = 0.3,
             mean_range = 5,
             sd_range = 1)
-# may need to run "mcmc" function multiple times before it works
-
 saveRDS(out, 'polya-gamma-posts.RDS')
 
 dat = list(y=y,
