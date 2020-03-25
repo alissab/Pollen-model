@@ -91,7 +91,7 @@ diag(D_grid) <- 0
 D_inter   <- fields::rdist(as.matrix(locs_grid/rescale), as.matrix(locs_pollen/rescale)) # N_locs x N_cores
 D_inter   <- cdist(as.matrix(locs_grid/rescale), as.matrix(locs_pollen/rescale)) # N_locs x N_cores
 any(D_inter == 0, na.rm = TRUE)   # check if there are off-diagonal zeros
-D_inter <- ifelse(D_inter == 0, 0.007, D_inter)  # remove them
+# D_inter <- ifelse(D_inter == 0, 0.007, D_inter)  # remove them
 
 foo=as.matrix(locs_grid/rescale)
 plot(foo[,1],foo[,2])
@@ -104,7 +104,7 @@ check = apply(D_inter, 2, function(x) which.min(x))
 N_iter = length(out$tau)
 J = dim(out$eta)[3] + 1
 
-burn = 500
+burn = 1
 N_keep = N_iter-burn+1
 
 tau   = out$tau[burn:N_iter]
