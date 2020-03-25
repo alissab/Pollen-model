@@ -264,7 +264,7 @@ mcmc <- function (y, locs, K, message = 100,
     tau2[k] <- rinvgamma(1, N * (J - 1) / 2 + alpha_tau,
                           SS / 2 + beta_tau)
     tau[k] <- sqrt(tau2[k])
-    Sigma <- tau[2]^2 * correlation_function(D, theta[2, ])
+    Sigma <- tau[k]^2 * correlation_function(D, theta[2, ])
     Sigma_chol <- chol(Sigma)
     Sigma_inv <- chol2inv(Sigma_chol)
   }
