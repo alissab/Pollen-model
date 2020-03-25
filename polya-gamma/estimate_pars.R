@@ -165,7 +165,7 @@ rescale=1e3
 locs_scaled = locs/rescale
 out <- mcmc(y, 
             locs_scaled, 
-            K = 10000, 
+            K = 500, 
             message = 100, 
             mean_nu = -1,
             sd_nu = 0.3,
