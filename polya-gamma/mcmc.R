@@ -257,7 +257,8 @@ mcmc <- function (y, locs, K, message = 100,
     ##
     ## sample spatial process variance tau^2
     ##
-    devs <- kappa - eta[k, , ]
+    devs <- eta[k, , ]
+    # devs <- kappa - eta[k, , ]
     SS <- sum(devs * (tau[k-1]^2 * Sigma_inv %*% as.matrix(devs)))
     # tau2[k] <- 1 / rgamma(1, N * (J - 1) / 2 + alpha_tau,
     #                       SS / 2 + beta_tau)
