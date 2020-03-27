@@ -163,14 +163,22 @@ correlation_function <- function(D, theta) {
 #### RUNNING THE MODEL & SAVING OUTPUT####
 rescale=1e3
 locs_scaled = locs/rescale
-out <- mcmc(y,
+out <- mcmc_mu(y,
             locs_scaled,
-            K = 1000,
+            K = 5000,
             message = 100,
             mean_nu = -1,
             sd_nu = 0.3,
             mean_range = 5,
             sd_range = 1)
+# out <- mcmc(y,
+#             locs_scaled,
+#             K = 1000,
+#             message = 100,
+#             mean_nu = -1,
+#             sd_nu = 0.3,
+#             mean_range = 5,
+#             sd_range = 1)
 # out <- mcmc_cov(y,
 #             locs_scaled,
 #             K = 500,

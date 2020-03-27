@@ -104,13 +104,14 @@ check = apply(D_inter, 2, function(x) which.min(x))
 N_iter = length(out$tau)
 J = dim(out$eta)[3] + 1
 
-burn = 1
+burn = 100
 N_keep = N_iter-burn+1
 
 tau   = out$tau[burn:N_iter]
 theta = out$theta[burn:N_iter,]
 omega = out$omega[burn:N_iter,,]
 eta   = out$eta[burn:N_iter,,]
+mu    = out$mu[burn:N_iter,]
 
 # check process estimates
 eta_mean = apply(eta, c(2,3), median)
@@ -153,12 +154,17 @@ for (i in 1:N_keep){
   mu2 = c(0,0)
   
   for (j in 1:(J-1)){
-    y_SB = eta[i,,j] #- mean(eta[i,,j]) 
+    y_SB = eta[i,,j] - mu[i,j] 
     #eta_preds[,j,i] = mu2[j] + Sigma_inter %*% Sigma_pol_inv2 %*% y_SB  
-    eta_preds[,j,i] = Sigma_inter %*% Sigma_pol_inv2 %*% y_SB 
+    eta_preds[,j,i] = mu[i,j] + Sigma_inter %*% Sigma_pol_inv2 %*% y_SB 
   }
 }
 
+# check spatial correlation
+# want this to not decline as quickly as it does now
+# expect correlation at 500 km
+x = seq(0, 3000, length=500)
+plot(x, correlation_function(x, colMeans(theta)))
 
 # checking first iter
 eta_preds_real = eta_preds[,,1]
@@ -237,19 +243,32 @@ eta2pi <- function(eta_preds){
 pi_preds = eta2pi(eta_preds)
 
 pi_mean = apply(pi_preds, c(1,2), mean, na.rm=TRUE)
-colnames(pi_mean) = c('T1', 'T2', 'T3')
+colnames(pi_mean) = c('Alnus', 'Betula','Ulmus')
 
 
 preds = data.frame(locs_grid, pi_mean)
-
 preds_melt = melt(preds, id.vars=c('x', 'y'))
 
 ggplot(data=preds_melt) + 
   geom_point(aes(x=x, y=y, fill=value, color=value)) + 
-  scale_colour_gradientn(colours = terrain.colors(10)) + 
-  scale_fill_gradientn(colours = terrain.colors(10)) + 
+  scale_colour_gradientn(colours = tim.colors(10), limits=c(0,1)) + 
+  scale_fill_gradientn(colours = tim.colors(10), limits=c(0,1)) + 
   facet_wrap(~variable) + 
+  geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
+  geom_path(data = lakes_shp, aes(x = long, y = lat, group = group)) +
+  scale_y_continuous(limits = c(400000, 2200000)) +
+  scale_x_continuous(limits = c(-800000, 3600000)) +
+  theme_classic() +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        line = element_blank(),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        plot.title = element_blank()) +
   coord_equal()
+
+
 
 
 library(maptools)
