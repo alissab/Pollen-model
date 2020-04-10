@@ -7,7 +7,8 @@ mcmc_mu <- function (y, locs, K, message = 100,
                      mean_nu = -1,
                      sd_nu = 1,
                      mean_range = 0,
-                     sd_range = 10) {
+                     sd_range = 10,
+                     mu_sigma_prop=0.1) {
   require(pgdraw)
   require(mvnfast)
   ## define priors
@@ -52,7 +53,7 @@ mcmc_mu <- function (y, locs, K, message = 100,
   ## initialize mu
   mu <- matrix(0, K, J-1)
   mu0 = 0#rep(0, N)
-  mu0_Sigma = 10
+  mu0_Sigma = 100
   
   mu[1,] <- rnorm(2, mu0, mu0_Sigma)
   
@@ -70,9 +71,10 @@ mcmc_mu <- function (y, locs, K, message = 100,
   ## don't save eta due to memory constraints for larger datasets
   # eta <- matrix(0, N, J-1)
   eta <- array(0, dim = c(K, N, J-1))
-  eta[1, , ] <- t(rmvn(J-1, rep(0, N), Sigma_chol, isChol = TRUE))
-  # eta[1, , ] <- t(rmvn(J-1, rep(0, N), Sigma, isChol = FALSE))
-  
+  for (j in 1:(J-1)){
+    eta[1, ,j] <- t(rmvn(1, rep(mu[1,j], N), Sigma_chol, isChol = TRUE))
+    # eta[1, , ] <- t(rmvn(J-1, rep(0, N), Sigma, isChol = FALSE))
+  }
   
   ##
   ## initialize omega
@@ -113,47 +115,6 @@ mcmc_mu <- function (y, locs, K, message = 100,
   batch_samples = theta_batch
   Sigma_tune = Sigma_theta_tune
   Sigma_tune_chol = Sigma_theta_tune_chol
-  
-  updateTuningMV <- function(k, accept, lambda, batch_samples,
-                             Sigma_tune, Sigma_tune_chol) {
-    arr <- c(0.44, 0.35, 0.32, 0.25, 0.234)
-    # std::vector<double> acceptance_rates (arr, arr + sizeof(arr) / sizeof(arr[0]))
-    dimension <- nrow(batch_samples)
-    if (dimension >= 5) {
-      dimension <- 5
-    }
-    d <- ncol(batch_samples)
-    batch_size <- nrow(batch_samples)
-    optimal_accept <- arr[dimension]
-    times_adapted <- floor(k / 50)
-    gamma1 <- 1.0 / ((times_adapted + 3.0)^0.8)
-    gamma2 <- 10.0 * gamma1
-    adapt_factor <- exp(gamma2 * (accept - optimal_accept))
-    ## update the MV scaling parameter
-    lambda_out <- lambda * adapt_factor
-    ## center the batch of MCMC samples
-    batch_samples_tmp <- batch_samples
-    for (j in 1:d) {
-      mean_batch = mean(batch_samples[, j])
-      for (i in 1:batch_size) {
-        batch_samples_tmp[i, j] <- batch_samples[i, j] - mean_batch
-      }
-    }
-    
-    ## 50 is an MCMC batch size, can make this function more general later...
-    Sigma_tune_out <- Sigma_tune + gamma1 *
-      (t(batch_samples) %*% batch_samples / (50.0-1.0) - Sigma_tune)
-    Sigma_tune_chol_out <- chol(Sigma_tune)
-    accept_out <- 0.0
-    batch_samples_out <- matrix(0, batch_size, d)
-    return(list(
-      batch_samples = batch_samples_out,
-      Sigma_tune = Sigma_tune_out,
-      Sigma_tune_chol = Sigma_tune_chol_out,
-      lambda = lambda_out,
-      accept = accept_out
-    ))
-  }
   
   message("Starting MCMC, fitting for ", K, " iterations")
   
@@ -206,28 +167,31 @@ mcmc_mu <- function (y, locs, K, message = 100,
     Sigma_chol_star <- chol(Sigma_star)
     Sigma_inv_star <- chol2inv(Sigma_chol_star)
     
-    # mh1 = NA
     mh1 <- sum(
       sapply(
         1:(J-1),
         function(j) {
           dmvn(eta[k, , j], rep(mu[k,j], N), Sigma_chol_star, isChol = TRUE, log = TRUE)
         }
-      )#, na.rm = TRUE  # ADDED THIS ARGUMENT
+      )
     ) +
       
       ## prior
-      sum(dnorm(theta_star, theta_mean, theta_sd, log = TRUE))
+      # sum(dnorm(theta_star, theta_mean, theta_sd, log = TRUE))
+      dmvn(theta_star, theta_mean, diag(theta_sd), log = TRUE)
+    
     mh2 <- sum(
       sapply(
         1:(J-1),
         function(j) {
           dmvn(eta[k, , j], rep(mu[k,j], N), Sigma_chol, isChol = TRUE, log = TRUE)
         }
-      )#, na.rm = TRUE  # ADDED THIS
+      )
     ) +
       ## prior
-      sum(dnorm(theta, theta_mean, theta_sd, log = TRUE))
+      # sum(dnorm(theta, theta_mean, theta_sd, log = TRUE)) #+
+      dmvn(theta[k-1,], theta_mean, diag(theta_sd), log = TRUE) #+
+      # sum(dnorm(theta))
     mh <- exp(mh1 - mh2)
     
     if(mh > runif(1, 0, 1)) {
@@ -268,15 +232,16 @@ mcmc_mu <- function (y, locs, K, message = 100,
     ##
     ## sample spatial process variance tau^2
     ##
-    devs <- eta[k, , ]
+    devs <- eta[k, , ] - mu[k,]
     # devs <- kappa - eta[k, , ]
+    # doesn't actually depend on tau[k-1] because Sigma_Inv has a 1/tau[k-1] factor
     SS <- sum(devs * (tau[k-1]^2 * Sigma_inv %*% as.matrix(devs)))
     # tau2[k] <- 1 / rgamma(1, N * (J - 1) / 2 + alpha_tau,
     #                       SS / 2 + beta_tau)
     tau2[k] <- rinvgamma(1, N * (J - 1) / 2 + alpha_tau,
                          SS / 2 + beta_tau)
     tau[k] <- sqrt(tau2[k])
-    Sigma <- tau[k]^2 * correlation_function(D, theta[2, ])
+    Sigma <- tau[k]^2 * correlation_function(D, theta[k, ])
     Sigma_chol <- chol(Sigma)
     Sigma_inv <- chol2inv(Sigma_chol)
     
@@ -342,4 +307,46 @@ mcmc_mu <- function (y, locs, K, message = 100,
       mu = mu
     )
   )
+}
+
+
+updateTuningMV <- function(k, accept, lambda, batch_samples,
+                           Sigma_tune, Sigma_tune_chol) {
+  arr <- c(0.44, 0.35, 0.32, 0.25, 0.234)
+  # std::vector<double> acceptance_rates (arr, arr + sizeof(arr) / sizeof(arr[0]))
+  dimension <- nrow(batch_samples)
+  if (dimension >= 5) {
+    dimension <- 5
+  }
+  d <- ncol(batch_samples)
+  batch_size <- nrow(batch_samples)
+  optimal_accept <- arr[dimension]
+  times_adapted <- floor(k / 50)
+  gamma1 <- 1.0 / ((times_adapted + 3.0)^0.8)
+  gamma2 <- 10.0 * gamma1
+  adapt_factor <- exp(gamma2 * (accept - optimal_accept))
+  ## update the MV scaling parameter
+  lambda_out <- lambda * adapt_factor
+  ## center the batch of MCMC samples
+  batch_samples_tmp <- batch_samples
+  for (j in 1:d) {
+    mean_batch = mean(batch_samples[, j])
+    for (i in 1:batch_size) {
+      batch_samples_tmp[i, j] <- batch_samples[i, j] - mean_batch
+    }
+  }
+  
+  ## 50 is an MCMC batch size, can make this function more general later...
+  Sigma_tune_out <- Sigma_tune + gamma1 *
+    (t(batch_samples) %*% batch_samples / (50.0-1.0) - Sigma_tune)
+  Sigma_tune_chol_out <- chol(Sigma_tune)
+  accept_out <- 0.0
+  batch_samples_out <- matrix(0, batch_size, d)
+  return(list(
+    batch_samples = batch_samples_out,
+    Sigma_tune = Sigma_tune_out,
+    Sigma_tune_chol = Sigma_tune_chol_out,
+    lambda = lambda_out,
+    accept = accept_out
+  ))
 }
