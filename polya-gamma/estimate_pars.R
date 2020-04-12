@@ -163,14 +163,31 @@ correlation_function <- function(D, theta) {
 #### RUNNING THE MODEL & SAVING OUTPUT####
 rescale=1e3
 locs_scaled = locs/rescale
-out <- mcmc_mu(y,
-            locs_scaled,
-            K = 5000,
-            message = 100,
-            mean_nu = -1,
-            sd_nu = 0.3,
-            mean_range = 5,
-            sd_range = 1)
+
+
+mean_nu    = -0.9
+sd_nu      = 0.005
+mean_range = 4.6
+sd_range   = 0.2
+alpha_tau  = 1/2
+beta_tau   = 10
+
+out <- mcmc_mu_theta(y,
+               locs_scaled,
+               K = 5000,
+               message = 100,
+               mean_nu = mean_nu,
+               sd_nu = sd_nu,
+               mean_range = mean_range,
+               sd_range = sd_range)
+# out <- mcmc_mu(y,
+#             locs_scaled,
+#             K = 5000,
+#             message = 100,
+#             mean_nu = mean_nu,
+#             sd_nu = sd_nu,
+#             mean_range = mean_range,
+#             sd_range = sd_range)
 # out <- mcmc(y,
 #             locs_scaled,
 #             K = 1000,
@@ -187,7 +204,7 @@ out <- mcmc_mu(y,
 #             sd_nu = 0.3,
 #             mean_range = 5,
 #             sd_range = 1)
-saveRDS(out, 'polya-gamma-posts.RDS')
+saveRDS(out, 'polya-gamma-posts_test.RDS')
 
 dat = list(y=y,
      locs=locs_scaled,
