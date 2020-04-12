@@ -20,7 +20,7 @@ cont_shp <- subset(na_shp,
                    (NAME_0 %in% c("United States of America", "Mexico", "Canada")))
 
 #### READ IN MODEL DATA AND OUTPUT ####
-out = readRDS('polya-gamma-posts.RDS')
+out = readRDS('polya-gamma-posts_test.RDS')
 dat = readRDS('polya-gamma-dat.RDS')
 
 # note that locations were scaled to fit the model
@@ -108,10 +108,12 @@ burn = 100
 N_keep = N_iter-burn+1
 
 tau   = out$tau[burn:N_iter]
-theta = out$theta[burn:N_iter,]
+theta = out$theta[,burn:N_iter,]
 omega = out$omega[burn:N_iter,,]
 eta   = out$eta[burn:N_iter,,]
 mu    = out$mu[burn:N_iter,]
+
+# theta = theta[1,]
 
 # check process estimates
 eta_mean = apply(eta, c(2,3), median)
@@ -133,38 +135,36 @@ correlation_function <- function(D, theta) {
   geoR::matern(D, exp(theta[1]), exp(theta[2]))
 }
 
+plot(x, mean(tau)^2*geoR::matern(x, exp(colMeans(out$theta[1,,]))[1], exp(colMeans(out$theta[1,,]))[2]))
+plot(x, mean(tau)^2*geoR::matern(x, exp(colMeans(out$theta[2,,]))[1], exp(colMeans(out$theta[2,,]))[2]))
+
+# plot(x, geoR::matern(x, exp(colMeans(out$theta))[1], exp(colMeans(out$theta))[2]))
+# plot(x[1:100], geoR::matern(x[1:100], exp(colMeans(out$theta))[1], exp(colMeans(out$theta))[2]))
 
 
 eta_preds <- array(0, dim=c(N_grid, J-1, N_keep))
 for (i in 1:N_keep){
-# for (i in 1:1){
+  # for (i in 1:1){
   print(i)
-  # Sigma_pol   = tau[i]^2*correlation_function(D_pollen, theta[i, ])
-  # Sigma_inter = tau[i]^2*correlation_function(D_inter, theta[i, ])
-  
-  # but tau^2 cancels in the calculation below
-  Sigma_pol   = correlation_function(D_pollen, theta[i, ])
-  Sigma_inter = correlation_function(D_inter, theta[i, ])
-  
-  # Sigma_pol_chol <- chol(Sigma_pol)
-  # Sigma_pol_inv1 <- chol2inv(Sigma_pol_chol)
-  Sigma_pol_inv2 <- solve(Sigma_pol) 
-  
-  mu1 = c(0,0)
-  mu2 = c(0,0)
-  
   for (j in 1:(J-1)){
+    
+    # but tau^2 cancels in the calculation below
+    Sigma_pol   = correlation_function(D_pollen, theta[j,i, ])
+    Sigma_inter = correlation_function(D_inter, theta[j,i, ])
+    Sigma_pol_inv2 <- solve(Sigma_pol) 
+  
     y_SB = eta[i,,j] - mu[i,j] 
     #eta_preds[,j,i] = mu2[j] + Sigma_inter %*% Sigma_pol_inv2 %*% y_SB  
     eta_preds[,j,i] = mu[i,j] + Sigma_inter %*% Sigma_pol_inv2 %*% y_SB 
   }
 }
 
-# check spatial correlation
-# want this to not decline as quickly as it does now
-# expect correlation at 500 km
-x = seq(0, 3000, length=500)
-plot(x, correlation_function(x, colMeans(theta)))
+# # check spatial correlation
+# # want this to not decline as quickly as it does now
+# # expect correlation at 500 km
+# x = seq(0, 3000, length=500)
+# plot(x, correlation_function(x, colMeans(theta)))
+# plot(x[1:50], correlation_function(x[1:50], colMeans(theta)))
 
 # checking first iter
 eta_preds_real = eta_preds[,,1]
@@ -194,53 +194,31 @@ ggplot(data=eta_preds_melt) +
 
 #### PREDICTED PROPROTIONS ####
 # # function to convert eta to pi (proportions)
-# expit <- function(x) {
-#   1 / (1 + exp(-x))
-# }
+expit <- function(x) {
+  1 / (1 + exp(-x))
+}
 # 
-# eta_to_pi <- function(eta) {
-#   ## convert eta to a probability vector pi
-#   ## can make this more general by first checking if vector vs. matrix and then
-#   ## calculating the response
-#   N <- nrow(eta)
-#   J <- ncol(eta) + 1
-#   pi <- matrix(0, N, J)
-#   stick <- rep(1, N)
-#   for (j in 1:(J - 1)) {
-#     pi[, j] <- expit(eta[, j]) * stick
-#     stick <- stick - pi[, j]
-#   }
-#   pi[, J] <- stick
-#   return(pi)
-# }
-
-# pi_preds = array(NA, dim=c(N_grid, J, N_keep))
-# for (i in 1:N_keep){
-#   pi_preds[,,i] <- eta_to_pi(eta_preds[,,i])
-#   # pis <- pis %>% mutate(sum = rowSums(.))  # check to make sure it worked
-# }
-
-eta2pi <- function(eta_preds){
-  dims = dim(eta_preds)
-  N_grid = dims[1]
-  J = dims[2] 
-  N_keep = dims[3]
-  
-  pi_preds = array(NA, dim=c(N_grid, J+1, N_keep))
-  exp_eta = exp(eta_preds)
-  sum_exp = apply(exp_eta, c(1, 3), sum)
-  
-  for (i in 1:N_keep){
-    for (j in 1:J){
-      pi_preds[,j,i] = exp_eta[,j,i]/(1+ sum_exp[,i])
-    }
-    pi_preds[, J+1, i] = 1/(1+ sum_exp[,i])
+eta_to_pi <- function(eta) {
+  ## convert eta to a probability vector pi
+  ## can make this more general by first checking if vector vs. matrix and then
+  ## calculating the response
+  N <- nrow(eta)
+  J <- ncol(eta) + 1
+  pi <- matrix(0, N, J)
+  stick <- rep(1, N)
+  for (j in 1:(J - 1)) {
+    pi[, j] <- expit(eta[, j]) * stick
+    stick <- stick - pi[, j]
   }
-  
-  return(pi_preds)
+  pi[, J] <- stick
+  return(pi)
 }
 
-pi_preds = eta2pi(eta_preds)
+pi_preds = array(NA, dim=c(N_grid, J, N_keep))
+for (i in 1:N_keep){
+  pi_preds[,,i] <- eta_to_pi(eta_preds[,,i])
+  # pis <- pis %>% mutate(sum = rowSums(.))  # check to make sure it worked
+}
 
 pi_mean = apply(pi_preds, c(1,2), mean, na.rm=TRUE)
 colnames(pi_mean) = c('Alnus', 'Betula','Ulmus')
