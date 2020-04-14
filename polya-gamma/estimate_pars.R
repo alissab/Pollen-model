@@ -13,6 +13,8 @@ require(invgamma)
 
 #### MCMC SAMPLER ####
 source('mcmc.R')
+source('mcmc_mu_theta.R')
+
 
 #### DATA PREP ####
 dat <- readRDS("../data/pollen_data.RData")
@@ -406,4 +408,3 @@ plot(pis$X2, props$bprop)
 abline(0, 1, col = "red")
 plot(pis$X3, props$uprop)
 abline(0, 1, col = "red")
-
