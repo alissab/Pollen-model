@@ -34,6 +34,10 @@ mcmc_mu_theta <- function (y, locs, K, message = 100,
     Mi[i,] <- sumY[i] - cumsumY[i,]
   }
   
+  Mi <- round(Mi)
+  Mi <- apply(Mi, 2, function(x) as.integer(x))
+  Mi <- data.frame(Mi)
+  
   ####################initialize kappa###################
   kappa <- data.frame(matrix(0, N, J-1))
   for (i in 1: N) {
@@ -63,7 +67,7 @@ mcmc_mu_theta <- function (y, locs, K, message = 100,
   mu0 = 0#rep(0, N)
   mu0_Sigma = 100
   
-  mu[1,] <- rnorm(2, mu0, mu0_Sigma)
+  mu[1,] <- rnorm(J-1, mu0, mu0_Sigma)
   
   ## construct Sigma covariance matrix
   # MAKE SURE IT'S INVERTIBLE
