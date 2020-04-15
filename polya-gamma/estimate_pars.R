@@ -40,110 +40,6 @@ coords = coordinates(dat_coords_t)
 coords <- data.frame(coords)
 
 
-##### CREATING A GRID #####
-# make regularly spaces points across spatial extent which will be used for
-# making predictions
-x_coords <- seq(min(coords[,1]), max(coords[,1]), by = 50000)
-y_coords <- seq(min(coords[,2]), max(coords[,2] + 10000), by = 50000)
-grid_coords <- data.frame(cbind(rep(x_coords, times = 25), rep(y_coords, each = 70)))
-names(grid_coords) <- c("x", "y")
-site_coords <- coords
-
-# associate each site location with the closest of the grid points
-# use rdist funtion to calculate distances between grid points and sites
-# it'll give you a distance matrix
-# find the minimum distance for each site
-# use the associated grid coordinate for each site
-site_coords <- as.matrix(site_coords)
-grid_coords <- as.matrix(grid_coords)
-dist <- cdist(X = site_coords, Y = grid_coords)
-
-# for each row (site), which column contains the minimum value?
-# the name of that column (minus "V") is the row in the grid_coords you should use
-
-# make sure all distances are less than ~35km, otherwise something is wrong
-min_dist <- apply(dist, MARGIN = 1, FUN = "min")
-
-# find column number associated with minimum value for each row
-min_dist <- apply(dist, MARGIN = 1, FUN = "which.min")
-
-# associate sites with coordinates from grid_coords that are nearest
-grid_coords <- data.frame(grid_coords)
-grid_coords$ref <- as.integer(row.names(grid_coords))
-min_dist <- data.frame(min_dist)
-colnames(min_dist) <- "ref"
-min_dist$site_ref <- 1:139
-min_coords <- left_join(grid_coords, min_dist, by = "ref")
-
-# create df with all grid points, with observations and NAs
-dat$site_ref <- as.integer(row.names(dat))
-dat_grid_coords <- left_join(min_coords, dat, by = "site_ref")
-dat_grid_coords <- dat_grid_coords[,c('x','y','site_ref','Alnus','Betula','Ulmus')]
-dat_grid_coords <- dat_grid_coords %>% group_by(x, y) %>% 
-  summarise(site_ref = min(site_ref), Alnus = sum(Alnus), Betula = sum(Betula), 
-            Ulmus = sum(Ulmus))
-
-# make sure grid points are correct
-site_coords <- data.frame(site_coords)
-grid_coords <- data.frame(grid_coords)
-new_sites <- left_join(min_dist, grid_coords, by = "ref")
-
-ggplot(data = grid_coords) +
-  geom_point(aes(x = x, y = y), alpha = 0.3) +
-  geom_point(data = site_coords, aes(x = x, y = y),
-             size = 2, alpha = 0.5, col = "red") +
-  geom_point(data = new_sites, aes(x = x, y = y),
-             size = 2, alpha = 0.7, col = "blue") +
-  geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
-  scale_y_continuous(limits = c(400000, 2200000)) +
-  scale_x_continuous(limits = c(-800000, 3600000)) +
-  theme_classic() +
-  theme(axis.ticks = element_blank(),
-        axis.text = element_blank(),
-        axis.title = element_blank(),
-        line = element_blank(),
-        legend.title = element_text(size = 16),
-        legend.text = element_text(size = 14),
-        plot.title = element_blank()) +
-  coord_fixed()
-
-
-# then clip grid coordinates to land (don't estimate pollen in the ocean or lakes)
-lakes_shp <- readOGR("../data/map-data/Great_Lakes.shp", "Great_Lakes")
-lakes_shp <- sp::spTransform(lakes_shp, proj_out)
-shp <- rgeos::gDifference(cont_shp, lakes_shp)
-plot(shp)
-
-dat_grid_coords_sp <- SpatialPointsDataFrame(coords = dat_grid_coords[,c('x','y')],
-                                             data = dat_grid_coords[,c('site_ref','Alnus',
-                                                                       'Betula','Ulmus')])
-cropped <- raster::intersect(dat_grid_coords_sp, shp)
-# warning messgae from above line that needs to be dealt with
-cropped <- data.frame(cropped)
-
-ggplot(data = cropped) +
-  geom_point(aes(x = x, y = y), alpha = 0.3) +
-  geom_point(data = site_coords, aes(x = x, y = y),
-             size = 2, alpha = 0.5, col = "red") +
-  geom_point(data = new_sites, aes(x = x, y = y),
-             size = 2, alpha = 0.7, col = "blue") +
-  geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
-  geom_path(data = lakes_shp, aes(x = long, y = lat, group = group)) +
-  scale_y_continuous(limits = c(400000, 2200000)) +
-  scale_x_continuous(limits = c(-800000, 3600000)) +
-  theme_classic() +
-  theme(axis.ticks = element_blank(),
-        axis.text = element_blank(),
-        axis.title = element_blank(),
-        line = element_blank(),
-        legend.title = element_text(size = 16),
-        legend.text = element_text(size = 14),
-        plot.title = element_blank()) +
-  coord_fixed()
-
-
-
-
 ##### WRITING THE MODEL #####
 
 require(tidyverse)
@@ -166,13 +62,13 @@ correlation_function <- function(D, theta) {
 rescale=1e3
 locs_scaled = locs/rescale
 
-
-mean_nu    = -0.9
-sd_nu      = 0.005
-mean_range = 4.6
-sd_range   = 0.2
-alpha_tau  = 1/2
-beta_tau   = 10
+mu_sigma_prop = 1
+mean_nu       = -0.9
+sd_nu         = 0.005
+mean_range    = 4.6
+sd_range      = 0.2
+alpha_tau     = 1/2
+beta_tau      = 10
 
 out <- mcmc_mu_theta(y,
                locs_scaled,
@@ -407,4 +303,8 @@ abline(0, 1, col = "red")
 plot(pis$X2, props$bprop)
 abline(0, 1, col = "red")
 plot(pis$X3, props$uprop)
+<<<<<<< HEAD
 abline(0, 1, col = "red")
+=======
+abline(0, 1, col = "red")
+>>>>>>> 5e8a702831d51e4e0769d5edbc9bd04a516d5f88
