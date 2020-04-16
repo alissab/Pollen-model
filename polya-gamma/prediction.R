@@ -129,18 +129,28 @@ ggplot(data=eta_melt) +
   scale_fill_gradientn(colours = terrain.colors(10)) + 
   coord_equal()
 
-
 ## calculate the Matern correlation using parameters theta on the log scale
 correlation_function <- function(D, theta) {
   geoR::matern(D, exp(theta[1]), exp(theta[2]))
 }
 
-plot(x, mean(tau)^2*geoR::matern(x, exp(colMeans(out$theta[1,,]))[1], exp(colMeans(out$theta[1,,]))[2]))
-plot(x, mean(tau)^2*geoR::matern(x, exp(colMeans(out$theta[2,,]))[1], exp(colMeans(out$theta[2,,]))[2]))
+x = seq(0, max(D_grid), length=1000)
+taxa = c('Acer', 'Alnus','Betula', 'Fagus', 'Ostrya.Carpinus', 'Ulmus')
+cov_df = data.frame(taxon=character(0),
+                    distance=numeric(0),
+                    covar=numeric(0))
+for (j in 1:(J-1)){
+ cov_df = rbind(cov_df, 
+                data.frame(taxon = rep(taxa[j], length(x)),
+                           distance = x, 
+                           covar = mean(tau)^2*geoR::matern(x, exp(colMeans(out$theta[j,,]))[1], exp(colMeans(out$theta[j,,]))[2])))
+}
 
-# plot(x, geoR::matern(x, exp(colMeans(out$theta))[1], exp(colMeans(out$theta))[2]))
-# plot(x[1:100], geoR::matern(x[1:100], exp(colMeans(out$theta))[1], exp(colMeans(out$theta))[2]))
 
+ggplot(data=cov_df) + 
+  geom_line(aes(x=distance, y=covar, color=taxon)) +
+  theme_bw() +
+  xlim(c(0,500))
 
 eta_preds <- array(0, dim=c(N_grid, J-1, N_keep))
 for (i in 1:N_keep){
