@@ -17,7 +17,8 @@ source('mcmc_mu_theta.R')
 
 
 #### DATA PREP ####
-dat <- readRDS("../data/pollen_data.RData")
+dato <- readRDS("../data/pollen_data.RData")
+dat <- readRDS("../data/6taxa_dat.RData")
 
 proj_out <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5
   +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"
@@ -51,7 +52,8 @@ require(geoR)
 
 K <- 1000
 locs = coords[,c('x', 'y')]
-y = as.data.frame(dat[,c('Alnus','Betula','Ulmus')])
+
+y = as.data.frame(dat[,c('Acer', 'Alnus','Betula', 'Fagus', 'Ostrya.Carpinus', 'Ulmus')])
 
 ## calculate the Matern correlation using parameters theta on the log scale
 correlation_function <- function(D, theta) {
