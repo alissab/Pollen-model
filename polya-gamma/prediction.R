@@ -5,6 +5,7 @@ require(ggplot2)
 require(sp)
 require(rgdal)
 library(raster)
+require(fields)
 
 #### READ MAP DATA ####
 # getting data ready
@@ -18,6 +19,9 @@ na_shp <- readOGR("../data/map-data/NA_States_Provinces_Albers.shp", "NA_States_
 na_shp <- sp::spTransform(na_shp, proj_out)
 cont_shp <- subset(na_shp,
                    (NAME_0 %in% c("United States of America", "Mexico", "Canada")))
+lake_shp <- readOGR("../data/map-data/Great_Lakes.shp", "Great_Lakes")
+lake_shp <- sp::spTransform(lake_shp, proj_out)
+
 
 #### READ IN MODEL DATA AND OUTPUT ####
 out = readRDS('polya-gamma-posts_test.RDS')
@@ -104,7 +108,7 @@ check = apply(D_inter, 2, function(x) which.min(x))
 N_iter = length(out$tau)
 J = dim(out$eta)[3] + 1
 
-burn = 100
+burn = 20
 N_keep = N_iter-burn+1
 
 tau   = out$tau[burn:N_iter]
@@ -231,7 +235,7 @@ for (i in 1:N_keep){
 }
 
 pi_mean = apply(pi_preds, c(1,2), mean, na.rm=TRUE)
-colnames(pi_mean) = c('Alnus', 'Betula','Ulmus')
+colnames(pi_mean) = c('Acer', 'Alnus','Betula', 'Fagus', 'Ostrya.Carpinus', 'Ulmus')
 
 
 preds = data.frame(locs_grid, pi_mean)
@@ -243,7 +247,7 @@ ggplot(data=preds_melt) +
   scale_fill_gradientn(colours = tim.colors(10), limits=c(0,1)) + 
   facet_wrap(~variable) + 
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
-  geom_path(data = lakes_shp, aes(x = long, y = lat, group = group)) +
+  geom_path(data = lake_shp, aes(x = long, y = lat, group = group)) +
   scale_y_continuous(limits = c(400000, 2200000)) +
   scale_x_continuous(limits = c(-800000, 3600000)) +
   theme_classic() +
@@ -280,7 +284,7 @@ pieMap(proportions = pi_mean,
        scale  = 1,
        xlab   = 'x',
        ylab   = 'y', 
-       add_legend=TRUE,
+       add_legend=FALSE,
        main_title='',
        cont_shp=cont_shp)
 
