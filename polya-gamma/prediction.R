@@ -231,7 +231,7 @@ for (i in 1:N_keep){
 }
 
 pi_mean = apply(pi_preds, c(1,2), mean, na.rm=TRUE)
-colnames(pi_mean) = c('Alnus', 'Betula','Ulmus')
+colnames(pi_mean) = taxa#c('Alnus', 'Betula','Ulmus')
 
 
 preds = data.frame(locs_grid, pi_mean)
@@ -257,6 +257,34 @@ ggplot(data=preds_melt) +
   coord_equal()
 
 
+
+breaks = c(0, 0.01, 0.05, 0.10, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 1)
+preds_melt$value_binned = cut(preds_melt$value, breaks, include.lowest=TRUE, labels=FALSE)
+
+breaklabels = apply(cbind(breaks[1:(length(breaks)-1)], breaks[2:length(breaks)]), 1, 
+                    function(r) { sprintf("%0.2f - %0.2f", r[1], r[2]) })
+
+
+ggplot() + 
+  geom_tile(data=preds_melt, aes(x=x, y=y, fill=factor(value_binned))) + 
+  scale_fill_manual(values = tim.colors(length(breaks)), labels=breaklabels, name='Proportion', drop=FALSE) + 
+  # scale_colour_gradientn(colours = tim.colors(10), limits=c(0,1)) + 
+  # scale_fill_gradientn(colours = tim.colors(10), limits=c(0,1)) + 
+  facet_wrap(~variable) + 
+  geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
+  geom_path(data = lakes_shp, aes(x = long, y = lat, group = group)) +
+  scale_y_continuous(limits = c(400000, 2200000)) +
+  scale_x_continuous(limits = c(-800000, 3600000)) +
+  theme_classic() +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        line = element_blank(),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        plot.title = element_blank()) +
+  coord_equal()
+ggsave('../figs/preds_binned.png', device="png", type="cairo")
 
 
 library(maptools)
