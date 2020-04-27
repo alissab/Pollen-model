@@ -9,6 +9,12 @@ require(rgeos)
 require(ggplot2)
 require(invgamma)
 
+require(mvnfast)
+require(splines)
+require(pgdraw)
+require(fields)
+require(geoR)
+
 ## code in part from https://romanabashin.com/how-to-generate-regularly-spaced-points-on-a-map-inside-a-polygon/
 
 #### MCMC SAMPLER ####
@@ -42,14 +48,6 @@ coords <- data.frame(coords)
 
 
 ##### WRITING THE MODEL #####
-
-require(tidyverse)
-require(mvnfast)
-require(splines)
-require(pgdraw)
-require(fields)
-require(geoR)
-
 K <- 1000
 locs = coords[,c('x', 'y')]
 
@@ -74,7 +72,7 @@ beta_tau      = 10
 
 out <- mcmc_mu_theta(y,
                locs_scaled,
-               K = 5000,
+               K = 500,
                message = 100,
                mean_nu = mean_nu,
                sd_nu = sd_nu,
@@ -110,11 +108,6 @@ dat = list(y=y,
      locs=locs_scaled,
      rescale=rescale)
 saveRDS(dat, 'polya-gamma-dat.RDS')
-
-
-
-
-# out <- readRDS("tipton_mod_with_data.RData")
 
 
 #### SUMMARIZE PROCESS PARAMETER ####
