@@ -86,8 +86,8 @@ ggsave("../figs/polya-gamma/covariance_vs_distance.pdf")#, device="pdf", type="c
 ###############################################################################################################################
 
 # tau
-
-# ggplot() + geom_line(data=tau)
+tau_melt = data.frame(iter=seq(1, N_keep), value=tau)
+ggplot() + geom_line(data=tau_melt, aes(x=iter, y=value))
 
 # theta
 
