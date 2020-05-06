@@ -7,10 +7,13 @@ require(rgdal)
 library(raster)
 require(fields)
 
+run = "grid-pol"
+
 #### READ MAP DATA ####
 # getting data ready
 proj_out <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5
 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"
+
 # WGS84
 proj_WGS84 <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84
 +towgs84=0,0,0"
@@ -23,8 +26,8 @@ lake_shp <- readOGR("../data/map-data/Great_Lakes.shp", "Great_Lakes")
 lake_shp <- sp::spTransform(lake_shp, proj_out)
 
 #### READ IN MODEL DATA AND OUTPUT ####
-out = readRDS('polya-gamma-posts_test.RDS')
-dat = readRDS('polya-gamma-dat.RDS')
+out = readRDS('polya-gamma-posts_test2.RDS')
+dat = readRDS('polya-gamma-dat2.RDS')
 
 # note that locations were scaled to fit the model
 # unscaling to think in meters, then will rescale again before prediction
@@ -32,8 +35,17 @@ rescale = dat$rescale
 locs_pollen <- dat$locs*rescale 
 names(locs_pollen) <- c("x", "y")
 
-y = dat$y
+taxa.keep =  as.vector(colnames(dat$y))#[!(colnames(dat) %in% c('x', 'y'))])
+y = as.data.frame(dat$y[,taxa.keep])
+
 N_cores = nrow(locs_pollen)
+
+pol_box <- bbox_tran(locs_pollen, '~ x + y',
+                     proj_out,
+                     proj_out)
+
+xlim = c(pol_box[1]-24000, pol_box[3]+24000)
+ylim = c(pol_box[2]-24000, pol_box[4]+24000)
 
 #### DISTANCE MATRICES ####
 D_pollen <- fields::rdist(locs_pollen/rescale)# N_cores x N_cores
@@ -62,7 +74,9 @@ correlation_function <- function(D, theta) {
 }
 
 x = seq(0, max(D_grid), length=1000)
-taxa = c('Acer', 'Alnus','Betula', 'Fagus', 'Ostrya.Carpinus', 'Ulmus')
+# taxa = c('Acer', 'Alnus','Betula', 'Fagus', 'Ostrya.Carpinus', 'Ulmus')
+# taxa = c('Alnus','Betula', 'Fagus', 'Ostrya.Carpinus', 'Picea', 'Pinus', 'Quercus', 'Tsuga', 'Other')
+taxa = taxa.keep
 cov_df = data.frame(taxon=character(0),
                     distance=numeric(0),
                     covar=numeric(0))
@@ -70,7 +84,9 @@ for (j in 1:(J-1)){
   cov_df = rbind(cov_df, 
                  data.frame(taxon = rep(taxa[j], length(x)),
                             distance = x, 
-                            covar = mean(tau)^2*geoR::matern(x, exp(colMeans(out$theta[j,,]))[1], exp(colMeans(out$theta[j,,]))[2])))
+                            # covar = mean(tau)^2*geoR::matern(x, exp(colMeans(out$theta[j,,]))[1], exp(colMeans(out$theta[j,,]))[2])))
+                            covar = geoR::matern(x, exp(colMeans(out$theta[j,,]))[1], exp(colMeans(out$theta[j,,]))[2])))
+
 }
 
 ggplot(data=cov_df) + 
@@ -79,7 +95,7 @@ ggplot(data=cov_df) +
   xlim(c(0,500)) + 
   xlab("Distance (km)") + 
   ylab("Covariance")
-ggsave("../figs/polya-gamma/covariance_vs_distance.pdf")#, device="pdf", type="cairo")
+ggsave(paste0("../figs/polya-gamma/covariance_vs_distance_", run, ".pdf"))#, device="pdf", type="cairo")
 
 ###############################################################################################################################
 ## trace
@@ -88,8 +104,17 @@ ggsave("../figs/polya-gamma/covariance_vs_distance.pdf")#, device="pdf", type="c
 # tau
 tau_melt = data.frame(iter=seq(1, N_keep), value=tau)
 ggplot() + geom_line(data=tau_melt, aes(x=iter, y=value))
+ggsave(paste0("../figs/trace_tau_", run, ".png"), device="png", type="cairo")
 
 # theta
+theta_melt = melt(theta)
+colnames(theta_melt) = c('taxon', 'iter', 'number', 'value')
+
+ggplot(data=theta_melt) + 
+  geom_line(aes(x=iter, y=exp(value), color=factor(taxon))) +
+  theme_bw() +
+  facet_grid(number~., scales="free_y")
+ggsave(paste0("../figs/polya-gamma/trace_theta_", run, ".png"), device="png", type="cairo")
 
 # mu
 mu_melt = melt(mu)
@@ -99,7 +124,7 @@ mu_melt$taxon = taxa[mu_melt$taxon]
 ggplot(data=mu_melt) + 
   geom_line(aes(x=iter, y=value, color=taxon)) +
   theme_bw()
-ggsave('../figs/trace_mu.png', device="png", type="cairo")
+ggsave(paste0("../figs/trace_mu_", run, ".png"), device="png", type="cairo")
 
 ###############################################################################################################################
 ## maps
@@ -135,7 +160,7 @@ for (i in 1:N_keep){
 }
 
 pi_mean = apply(pis, c(1,2), mean, na.rm=TRUE)
-colnames(pi_mean) = c('Acer', 'Alnus','Betula', 'Fagus', 'Ostrya.Carpinus', 'Ulmus')
+colnames(pi_mean) = taxa.keep#c('Acer', 'Alnus','Betula', 'Fagus', 'Ostrya.Carpinus', 'Ulmus')
 
 preds = data.frame(locs_pollen, pi_mean)
 preds_melt = melt(preds, id.vars=c('x', 'y'))
@@ -162,8 +187,8 @@ ggplot() +
   facet_grid(variable~type) + 
   geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
   geom_path(data = lake_shp, aes(x = long, y = lat, group = group)) +
-  scale_y_continuous(limits = c(400000, 2200000)) +
-  scale_x_continuous(limits = c(-800000, 3600000)) +
+  scale_y_continuous(limits = ylim) +
+  scale_x_continuous(limits = xlim) +
   theme_classic() +
   theme(axis.ticks = element_blank(),
         axis.text = element_blank(),
@@ -173,7 +198,31 @@ ggplot() +
         legend.text = element_text(size = 14),
         plot.title = element_blank()) +
   coord_equal()
-ggsave('../figs/all_binned.png', device="png", type="cairo")
+ggsave(paste0("../figs/all_binned_", run, ".png"), device="png", type="cairo")
+
+
+ggplot() + 
+  geom_tile(data=all_melt, aes(x=x, y=y, color=factor(value_binned), fill=factor(value_binned))) + 
+  scale_fill_manual(values = tim.colors(length(breaks)), labels=breaklabels, name='Proportion', drop=FALSE) + 
+  scale_colour_manual(values = tim.colors(length(breaks)), labels=breaklabels, name='Proportion', drop=FALSE) + 
+  # scale_colour_gradientn(colours = tim.colors(10), limits=c(0,1)) + 
+  # scale_fill_gradientn(colours = tim.colors(10), limits=c(0,1)) + 
+  facet_grid(variable~type) + 
+  geom_path(data = cont_shp, aes(x = long, y = lat, group = group)) +
+  geom_path(data = lake_shp, aes(x = long, y = lat, group = group)) +
+  scale_y_continuous(limits = ylim) +
+  scale_x_continuous(limits = xlim) +
+  theme_classic() +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        line = element_blank(),
+        legend.title = element_text(size = 16),
+        legend.text = element_text(size = 14),
+        plot.title = element_blank()) +
+  coord_equal()
+ggsave(paste0("../figs/all_binned_tiled_", run, ".png"), device="png", type="cairo")
+
 
 ###############################################################################################################################
 ## observed versus predicted
@@ -192,4 +241,4 @@ ggplot(data=foo) +
   ylab("Predicted proportions") +
   geom_abline(intercept=0, slope=1) + 
   facet_wrap(~variable)
-ggsave('../figs/props_obs_vs_preds.png', device="png", type="cairo")
+ggsave(paste0("../figs/props_obs_vs_preds_", run, ".png"), device="png", type="cairo")
