@@ -14,6 +14,9 @@ require(splines)
 require(pgdraw)
 require(fields)
 require(geoR)
+library(dplyr)
+
+library(data.table)
 
 ## code in part from https://romanabashin.com/how-to-generate-regularly-spaced-points-on-a-map-inside-a-polygon/
 
@@ -23,8 +26,9 @@ source('mcmc_mu_theta.R')
 
 
 #### DATA PREP ####
-dato <- readRDS("../data/pollen_data.RData")
-dat <- readRDS("../data/6taxa_dat.RData")
+# dato <- readRDS("../data/pollen_data.RData")
+# dat <- readRDS("../data/6taxa_dat.RData")
+dat <- readRDS("../data/12taxa_dat.RDS")
 
 proj_out <- "+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5
   +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"
@@ -38,20 +42,37 @@ na_shp <- sp::spTransform(na_shp, proj_out)
 cont_shp <- subset(na_shp,
                    (NAME_0 %in% c("United States of America", "Mexico", "Canada")))
 
-dat_coords <- dat[, c("long","lat")]
-names(dat_coords) <- c("x", "y")
-coordinates(dat_coords) <- dat_coords
-sp::proj4string(dat_coords) <- proj_WGS84
-dat_coords_t <- sp::spTransform(dat_coords, proj_out)
-coords = coordinates(dat_coords_t)
-coords <- data.frame(coords)
 
+locs_grid = readRDS('data/grid.RDS')
 
 ##### WRITING THE MODEL #####
 K <- 1000
-locs = coords[,c('x', 'y')]
+locs = as.data.frame(dat[,c('x', 'y')])
 
-y = as.data.frame(dat[,c('Acer', 'Alnus','Betula', 'Fagus', 'Ostrya.Carpinus', 'Ulmus')])
+D_inter   <- cdist(as.matrix(locs_grid/rescale), as.matrix(locs/rescale)) # N_locs x N_cores
+any(D_inter == 0, na.rm = TRUE)   # check if there are off-diagonal zeros
+# D_inter <- ifelse(D_inter == 0, 0.007, D_inter)  # remove them
+closest.cell = apply(D_inter, 2, function(x) which.min(x))
+
+dat.mod = data.frame(closest=closest.cell, dat)
+
+dat.merged = as.data.table(dat.mod[, !(colnames(dat.mod) %in% c('x', 'y'))])[, lapply(.SD, sum, na.rm=TRUE), 
+                                                                             by = list(closest)]
+# dat[,3:ncol(dat)] = round(dat[,3:ncol(dat)])
+# locs = as.data.frame(dat.merged[,c('x', 'y')])
+
+# D_inter   <- cdist(as.matrix(locs_grid/rescale), as.matrix(locs/rescale)) # N_locs x N_cores
+# any(D_inter == 0, na.rm = TRUE)   # check if there are off-diagonal zeros
+# # D_inter <- ifelse(D_inter == 0, 0.007, D_inter)  # remove them
+# grid.cell = apply(D_inter, 2, function(x) which.min(x))
+
+locs = locs_grid[dat.merged$closest,]
+
+# y = as.data.frame(dat[,c('Acer', 'Alnus','Betula', 'Fagus', 'Ostrya.Carpinus', 'Ulmus')])
+# taxa.keep = c('Alnus','Betula', 'Fagus', 'Ostrya.Carpinus', 'Picea', 'Pinus', 'Quercus', 'Tsuga', 'Other')
+# taxa.keep =  as.vector(colnames(dat)[!(colnames(dat) %in% c('x', 'y', 'closest'))])
+taxa.keep =  as.vector(colnames(dat.merged)[!(colnames(dat.merged) %in% c('closest'))])
+y = as.data.frame(dat.merged[,..taxa.keep])
 
 ## calculate the Matern correlation using parameters theta on the log scale
 correlation_function <- function(D, theta) {
@@ -70,14 +91,22 @@ sd_range      = 0.2
 alpha_tau     = 1/2
 beta_tau      = 10
 
-out <- mcmc_mu_theta(y,
+out <- mcmc_fix(y,
                locs_scaled,
-               K = 500,
+               K = 100,
                message = 100,
                mean_nu = mean_nu,
                sd_nu = sd_nu,
                mean_range = mean_range,
                sd_range = sd_range)
+# out <- mcmc_mu_theta(y,
+#                 locs_scaled,
+#                 K = 1000,
+#                 message = 100,
+#                 mean_nu = mean_nu,
+#                 sd_nu = sd_nu,
+#                 mean_range = mean_range,
+#                 sd_range = sd_range)
 # out <- mcmc_mu(y,
 #             locs_scaled,
 #             K = 5000,
@@ -102,12 +131,12 @@ out <- mcmc_mu_theta(y,
 #             sd_nu = 0.3,
 #             mean_range = 5,
 #             sd_range = 1)
-saveRDS(out, 'polya-gamma-posts_test.RDS')
+saveRDS(out, 'polya-gamma-posts_test2.RDS')
 
 dat = list(y=y,
      locs=locs_scaled,
      rescale=rescale)
-saveRDS(dat, 'polya-gamma-dat.RDS')
+saveRDS(dat, 'polya-gamma-dat2.RDS')
 
 
 #### SUMMARIZE PROCESS PARAMETER ####
