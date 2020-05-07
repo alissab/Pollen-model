@@ -1,14 +1,14 @@
 # REGRESSION MCMC - SAMPLER FUNCTION
 mcmc_fix <- function (y, locs, K, message = 100,
-                           adapt = K / 2, ## when to stop tuning the MCMC
-                           ## default priors
-                           alpha_tau = 1/2,
-                           beta_tau = 10,
-                           mean_nu = -1,
-                           sd_nu = 1,
-                           mean_range = 0,
-                           sd_range = 10,
-                           mu_sigma_prop=0.1) {
+                      adapt = K / 2, ## when to stop tuning the MCMC
+                      ## default priors
+                      alpha_tau = 1/2,
+                      beta_tau = 10,
+                      mean_nu = -1,
+                      sd_nu = 1,
+                      mean_range = 0,
+                      sd_range = 10,
+                      mu_sigma_prop=0.1) {
   require(pgdraw)
   require(mvnfast)
   ## define priors
@@ -79,10 +79,6 @@ mcmc_fix <- function (y, locs, K, message = 100,
   D <- ifelse(D == 0, 0.007, D)  # remove them
   diag(D) <- 0
   
-  # Sigma <- tau2[1] * correlation_function(D, theta[1, ])
-  # Sigma_chol <- chol(Sigma)
-  # Sigma_inv <- chol2inv(Sigma_chol)
-  # 
   Sigma = array(0, c(J-1,N,N))
   Sigma_chol = array(0, c(J-1,N,N))
   Sigma_inv = array(0, c(J-1,N,N))
@@ -98,7 +94,6 @@ mcmc_fix <- function (y, locs, K, message = 100,
   eta <- array(0, dim = c(K, N, J-1))
   for (j in 1:(J-1)){
     eta[1, ,j] <- t(rmvn(1, rep(mu[1,j], N), Sigma_chol[j,,], isChol = TRUE))
-    # eta[1, , ] <- t(rmvn(J-1, rep(0, N), Sigma, isChol = FALSE))
   }
   
   ##
@@ -149,8 +144,10 @@ mcmc_fix <- function (y, locs, K, message = 100,
     # if (k %% message == 0) {
     #   message("Fitting iteration ", k, " out of ", K)
     # }
+    
     ##
-    ## sample Omega
+    ## sample Omega 
+    ## GIBBS STEP
     ##
     for (i in 1:N) {
       for (j in 1:(J-1)) {
@@ -170,6 +167,7 @@ mcmc_fix <- function (y, locs, K, message = 100,
     
     ##
     ## sample eta
+    ## GIBBS STEP
     ##
     theta_star = array(NA, c(J-1, 2))
     Sigma_star = array(0, c(J-1,N,N))
@@ -187,13 +185,18 @@ mcmc_fix <- function (y, locs, K, message = 100,
       
       ## can make this much more efficient
       Sigma_tilde[j,,] <- chol2inv(chol(Sigma_inv[j,,] + diag(Omega[k,,j])))
-      # mu_tilde <- c(Sigma_tilde %*% (Sigma_inv %*% rep(0, N) + kappa[, j]))
       mu_tilde[k,,j] <- c(Sigma_tilde[j,,] %*% (Sigma_inv[j,,] %*% rep(mu[k-1,j], N) + kappa[, j]))
-      eta[k, , j] <- rmvn(1, mu_tilde[k,,j], Sigma_tilde[j,,])  # k
       
-      ##
-      ## sample spatial correlation parameters theta
-      ##
+      eta[k, , j] <- rmvn(1, mu_tilde[k,,j], Sigma_tilde[j,,])  # k
+    }
+    
+    
+    ##
+    ## sample theta (spatial correlation parameters)
+    ## MCMC STEP
+    ##
+    
+    for (j in 1:(J-1)) {
       theta_star[j,] <- rmvn(
         n = 1,
         mu = theta[j, k-1, ],
@@ -204,24 +207,17 @@ mcmc_fix <- function (y, locs, K, message = 100,
       
       Sigma_chol_star[j,,] <- chol(Sigma_star[j,,])
       Sigma_inv_star[j,,]  <- chol2inv(Sigma_chol_star[j,,])
-      
-      # Sigma_tilde_star[j,,] = chol2inv(chol(Sigma_inv_star[j,,] + diag(Omega[k,,j])))
-      # mu_tilde_star[,j] <- c(Sigma_tilde_star[j,,] %*% (Sigma_inv_star[j,,] %*% rep(mu[k-1,j], N) + kappa[, j]))
     }
     
     mh1 <- sum(
       sapply(
         1:(J-1),
         function(j) {
-          # dmvn(eta[k, , j], mu_tilde_star[,j], Sigma_tilde_star[j,,], isChol = FALSE, log = TRUE)
           dmvn(eta[k, , j],  rep(mu[k-1,j], N), Sigma_star[j,,], isChol = FALSE, log = TRUE)
         }
       )
     ) +
-      
       ## prior
-      # sum(dnorm(theta_star, theta_mean, theta_sd, log = TRUE))
-      # dmvn(theta_star, theta_mean, diag(theta_sd), log = TRUE)
       sum(
         sapply(
           1:(J-1),
@@ -231,38 +227,15 @@ mcmc_fix <- function (y, locs, K, message = 100,
         )
       )
     
-    # mh1 <- sum(
-    #   sapply(
-    #     1:(J-1),
-    #     function(j) {
-    #       dmvn(eta[k, , j], rep(mu[k,j], N), Sigma_chol_star[j,,], isChol = TRUE, log = TRUE)
-    #     }
-    #   )
-    # ) +
-    #   
-    #   ## prior
-    #   # sum(dnorm(theta_star, theta_mean, theta_sd, log = TRUE))
-    #   # dmvn(theta_star, theta_mean, diag(theta_sd), log = TRUE)
-    #   sum(
-    #     sapply(
-    #       1:(J-1),
-    #       function(j){ 
-    #         dmvn(theta_star[j,], theta_mean, diag(theta_sd), log = TRUE)
-    #       }
-    #     )
-    #   )
-    
     mh2 <- sum(
       sapply(
         1:(J-1),
         function(j) {
-          # dmvn(eta[k, , j], mu_tilde[k,,j], Sigma_tilde[j,,], isChol = FALSE, log = TRUE)
           dmvn(eta[k, , j], rep(mu[k-1,j], N), Sigma[j,,], isChol = FALSE, log = TRUE)
         }
       )
     ) +
       ## prior
-      # sum(dnorm(theta, theta_mean, theta_sd, log = TRUE)) #+
       sum(
         sapply(
           1:(J-1),
@@ -270,26 +243,8 @@ mcmc_fix <- function (y, locs, K, message = 100,
             dmvn(theta[j,k-1,], theta_mean, diag(theta_sd), log = TRUE) 
           }
         )
-      )#+
-    # mh2 <- sum(
-    #   sapply(
-    #     1:(J-1),
-    #     function(j) {
-    #       dmvn(eta[k, , j], rep(mu[k,j], N), Sigma_chol[j,,], isChol = TRUE, log = TRUE)
-    #     }
-    #   )
-    # ) +
-    #   ## prior
-    #   # sum(dnorm(theta, theta_mean, theta_sd, log = TRUE)) #+
-    #   sum(
-    #     sapply(
-    #       1:(J-1),
-    #       function(j){ 
-    #         dmvn(theta[j,k-1,], theta_mean, diag(theta_sd), log = TRUE) 
-    #       }
-    #     )
-    #   )#+
-    # sum(dnorm(theta))
+      )
+    
     mh <- exp(mh1 - mh2)
     
     if(mh > runif(1, 0, 1)) {
@@ -334,7 +289,9 @@ mcmc_fix <- function (y, locs, K, message = 100,
     
     ##
     ## sample spatial process variance tau^2
+    ## MCMC STEP
     ##
+    
     # SS <- 0
     # for (j in 1:(J-1)){
     #   devs <- eta[k, ,j] - mu[k-1,j]
@@ -356,39 +313,18 @@ mcmc_fix <- function (y, locs, K, message = 100,
     # }
     
     tau2_star_mean = log(tau2[k-1])
-    # tau2_star_sd   = 1
     tau2_star = rlnorm(1, meanlog=tau2_star_mean, sdlog=tau2_star_sd)
-    # tau2_star_mean = tau[k-1]
-    # tau2_star_shape = tau2_star_mean^2/tau2_star_sd^2
-    # tau2_star_scale = tau2_star_mean/tau2_star_sd^2
-    # 
-    # # tau2_star_sd   = 0.1
-    # tau2_star = rgamma(1, shape=tau2_star_shape, scale=tau2_star_scale)
-    # tau2_star_mean = tau2[k-1]
-    # tau2_star_sd   = 0.03
-    # tau2_star = rnorm(1, mean=tau2_star_mean, sd=tau2_star_sd)
-    # tau2_star = runif(1, max(tau2_star_mean-0.2, 0), min(tau2_star_mean+0.2, 5))
-    # tau2_star=0.1
     
     for (j in 1:(J-1)){
-      ## can make this much more efficient
-      # Sigma_tilde[j,,] <- chol2inv(chol(Sigma_inv[j,,] + diag(Omega[k,,j])))
-      # # mu_tilde <- c(Sigma_tilde %*% (Sigma_inv %*% rep(0, N) + kappa[, j]))
-      # mu_tilde[k,,j] <- c(Sigma_tilde[j,,] %*% (Sigma_inv[j,,] %*% rep(mu[k-1,j], N) + kappa[, j]))
       Sigma_star[j,,] <- tau2_star * correlation_function(D, theta[j,k,])
       Sigma_chol_star[j,,] <- chol(Sigma_star[j,,])
       Sigma_inv_star[j,,]  <- chol2inv(Sigma_chol_star[j,,])
-      # Sigma_tilde_star[j,,] = chol2inv(chol(Sigma_inv_star[j,,] + diag(Omega[k,,j])))
-      # 
-      # mu_tilde_star[,j] <- c(Sigma_tilde_star[j,,] %*% (Sigma_inv_star[j,,] %*% rep(mu[k-1,j], N) + kappa[, j]))
     }
-      
+    
     tau_mh1 <- sum(
       sapply(
         1:(J-1),
         function(j) {
-          # dmvn(eta[k, , j], mu_tilde_star[,j], Sigma_tilde_star[j,,], isChol = FALSE, log = TRUE)
-          # dmvn(eta[k, , j], mu_tilde[k,,j], Sigma_tilde_star[j,,], isChol = FALSE, log = TRUE)
           dmvn(eta[k, , j], rep(mu[k-1,j], N), Sigma_star[j,,], isChol = FALSE, log = TRUE)
         }
       )
@@ -396,13 +332,11 @@ mcmc_fix <- function (y, locs, K, message = 100,
       ## prior
       dinvgamma(tau2_star, shape=alpha_tau, scale=beta_tau, log = TRUE) +
       dlnorm(tau2[k-1], meanlog=log(tau2_star), sdlog=tau2_star_sd, log=TRUE)
-      
+    
     tau_mh2 <- sum(
       sapply(
         1:(J-1),
         function(j) {
-          # dmvn(eta[k, , j], mu_tilde[k,,j], Sigma_tilde[j,,], isChol = FALSE, log = TRUE)
-          # dmvn(eta[k, , j], mu_tilde[k,,j], Sigma_tilde[j,,], isChol = FALSE, log = TRUE)
           dmvn(eta[k, , j], rep(mu[k-1,j], N), Sigma[j,,], isChol = FALSE, log = TRUE)
         }
       )
@@ -423,31 +357,24 @@ mcmc_fix <- function (y, locs, K, message = 100,
     
     tau[k] <- sqrt(tau2[k])
     
-    ## MCMC step for mu cause I can't figure out the full conditional
+    ##
+    ## sample spatial process variance tau^2
+    ## MCMC STEP (but can write down full conditional I think)
+    ##
     
     mu_prop = rep(0,J-1)
-
+    
     for (j in 1:(J-1)){
       mu_prop[j] = rnorm(1, mu[k-1,j], mu_sigma_prop)
       
       Sigma[j,,] <- tau2[k] * correlation_function(D, theta[j,k,])
       Sigma_chol[j,,] <- chol(Sigma[j,,])
       Sigma_inv[j,,] <- chol2inv(Sigma_chol[j,,])
-
-    #   ## can make this much more efficient
-    #   Sigma_tilde[j,,] <- chol2inv(chol(Sigma_inv[j,,] + diag(Omega[k,,j])))
-    #   # mu_tilde <- c(Sigma_tilde %*% (Sigma_inv %*% rep(0, N) + kappa[, j]))
-    #   mu_tilde[k,,j] <- c(Sigma_tilde[j,,] %*% (Sigma_inv[j,,] %*% rep(mu[k-1,j], N) + kappa[, j]))
-    #   
-    #   # mu_tilde with mu_prop
-    #   mu_tilde_star[,j] <- c(Sigma_tilde_star[j,,] %*% (Sigma_inv_star[j,,] %*% rep(mu_prop[j], N) + kappa[, j]))
-    }  
+   }  
     mu_mh1 = sum(sapply(1:(J-1), function(j){
-      # dmvn(eta[k,,j],  mu_tilde_star[,j], Sigma_tilde[j,,], log=TRUE)})) + 
       dmvn(eta[k,,j],  rep(mu_prop[j], N), Sigma[j,,], log=TRUE)})) + 
       sum(dnorm(mu_prop, mu0, mu0_Sigma, log=TRUE))
     mu_mh2 = sum(sapply(1:(J-1), function(j){
-      # dmvn(eta[k,,j], mu_tilde[k,,j], Sigma_tilde[j,,], log=TRUE)})) + 
       dmvn(eta[k,,j], rep(mu[k-1,j], N), Sigma[j,,], log=TRUE)})) + 
       sum(dnorm(mu[k-1,], mu0, mu0_Sigma, log=TRUE))
     
@@ -459,6 +386,10 @@ mcmc_fix <- function (y, locs, K, message = 100,
     } else {
       mu[k,] <- mu[k-1,]
     }
+    
+    ##
+    ## update proposal variance for mu and tau
+    ##
     
     if (k %% 50 == 0) {
       print(paste0("Acceptance rate for mu is: ", accept_mu/k))
