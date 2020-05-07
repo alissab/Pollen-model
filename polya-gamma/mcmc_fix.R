@@ -68,7 +68,7 @@ mcmc_fix <- function (y, locs, K, message = 100,
   ## initialize mu
   mu <- matrix(0, K, J-1)
   mu0 = 0#rep(0, N)
-  mu0_Sigma = 100
+  mu0_Sigma = 10
   
   mu[1,] <- rnorm(J-1, mu0, mu0_Sigma)
   
@@ -180,6 +180,11 @@ mcmc_fix <- function (y, locs, K, message = 100,
     Sigma_tilde_star = array(0, c(J-1,N,N))
     mu_tilde_star = array(0, c(N, J-1))
     for (j in 1:(J-1)) {
+      
+      # not sure if we need these
+      Sigma[j,,] <- tau[k-1]^2 * correlation_function(D, theta[j, k-1, ])
+      Sigma_inv[j,,] <- solve(Sigma[j,,])
+      
       ## can make this much more efficient
       Sigma_tilde[j,,] <- chol2inv(chol(Sigma_inv[j,,] + diag(Omega[k,,j])))
       # mu_tilde <- c(Sigma_tilde %*% (Sigma_inv %*% rep(0, N) + kappa[, j]))
@@ -200,15 +205,16 @@ mcmc_fix <- function (y, locs, K, message = 100,
       Sigma_chol_star[j,,] <- chol(Sigma_star[j,,])
       Sigma_inv_star[j,,]  <- chol2inv(Sigma_chol_star[j,,])
       
-      Sigma_tilde_star[j,,] = chol2inv(chol(Sigma_inv_star[j,,] + diag(Omega[k,,j])))
-      mu_tilde_star[,j] <- c(Sigma_tilde_star[j,,] %*% (Sigma_inv_star[j,,] %*% rep(mu[k-1,j], N) + kappa[, j]))
+      # Sigma_tilde_star[j,,] = chol2inv(chol(Sigma_inv_star[j,,] + diag(Omega[k,,j])))
+      # mu_tilde_star[,j] <- c(Sigma_tilde_star[j,,] %*% (Sigma_inv_star[j,,] %*% rep(mu[k-1,j], N) + kappa[, j]))
     }
     
     mh1 <- sum(
       sapply(
         1:(J-1),
         function(j) {
-          dmvn(eta[k, , j], mu_tilde_star[,j], Sigma_tilde_star[j,,], isChol = FALSE, log = TRUE)
+          # dmvn(eta[k, , j], mu_tilde_star[,j], Sigma_tilde_star[j,,], isChol = FALSE, log = TRUE)
+          dmvn(eta[k, , j],  rep(mu[k-1,j], N), Sigma_star[j,,], isChol = FALSE, log = TRUE)
         }
       )
     ) +
@@ -250,7 +256,8 @@ mcmc_fix <- function (y, locs, K, message = 100,
       sapply(
         1:(J-1),
         function(j) {
-          dmvn(eta[k, , j], mu_tilde[k,,j], Sigma_tilde[j,,], isChol = FALSE, log = TRUE)
+          # dmvn(eta[k, , j], mu_tilde[k,,j], Sigma_tilde[j,,], isChol = FALSE, log = TRUE)
+          dmvn(eta[k, , j], rep(mu[k-1,j], N), Sigma[j,,], isChol = FALSE, log = TRUE)
         }
       )
     ) +
@@ -365,15 +372,15 @@ mcmc_fix <- function (y, locs, K, message = 100,
     
     for (j in 1:(J-1)){
       ## can make this much more efficient
-      Sigma_tilde[j,,] <- chol2inv(chol(Sigma_inv[j,,] + diag(Omega[k,,j])))
-      # mu_tilde <- c(Sigma_tilde %*% (Sigma_inv %*% rep(0, N) + kappa[, j]))
-      mu_tilde[k,,j] <- c(Sigma_tilde[j,,] %*% (Sigma_inv[j,,] %*% rep(mu[k-1,j], N) + kappa[, j]))
+      # Sigma_tilde[j,,] <- chol2inv(chol(Sigma_inv[j,,] + diag(Omega[k,,j])))
+      # # mu_tilde <- c(Sigma_tilde %*% (Sigma_inv %*% rep(0, N) + kappa[, j]))
+      # mu_tilde[k,,j] <- c(Sigma_tilde[j,,] %*% (Sigma_inv[j,,] %*% rep(mu[k-1,j], N) + kappa[, j]))
       Sigma_star[j,,] <- tau2_star * correlation_function(D, theta[j,k,])
       Sigma_chol_star[j,,] <- chol(Sigma_star[j,,])
       Sigma_inv_star[j,,]  <- chol2inv(Sigma_chol_star[j,,])
-      Sigma_tilde_star[j,,] = chol2inv(chol(Sigma_inv_star[j,,] + diag(Omega[k,,j])))
-      
-      mu_tilde_star[,j] <- c(Sigma_tilde_star[j,,] %*% (Sigma_inv_star[j,,] %*% rep(mu[k-1,j], N) + kappa[, j]))
+      # Sigma_tilde_star[j,,] = chol2inv(chol(Sigma_inv_star[j,,] + diag(Omega[k,,j])))
+      # 
+      # mu_tilde_star[,j] <- c(Sigma_tilde_star[j,,] %*% (Sigma_inv_star[j,,] %*% rep(mu[k-1,j], N) + kappa[, j]))
     }
       
     tau_mh1 <- sum(
@@ -381,7 +388,8 @@ mcmc_fix <- function (y, locs, K, message = 100,
         1:(J-1),
         function(j) {
           # dmvn(eta[k, , j], mu_tilde_star[,j], Sigma_tilde_star[j,,], isChol = FALSE, log = TRUE)
-          dmvn(eta[k, , j], mu_tilde[k,,j], Sigma_tilde_star[j,,], isChol = FALSE, log = TRUE)
+          # dmvn(eta[k, , j], mu_tilde[k,,j], Sigma_tilde_star[j,,], isChol = FALSE, log = TRUE)
+          dmvn(eta[k, , j], rep(mu[k-1,j], N), Sigma_star[j,,], isChol = FALSE, log = TRUE)
         }
       )
     ) +
@@ -393,7 +401,9 @@ mcmc_fix <- function (y, locs, K, message = 100,
       sapply(
         1:(J-1),
         function(j) {
-          dmvn(eta[k, , j], mu_tilde[k,,j], Sigma_tilde[j,,], isChol = FALSE, log = TRUE)
+          # dmvn(eta[k, , j], mu_tilde[k,,j], Sigma_tilde[j,,], isChol = FALSE, log = TRUE)
+          # dmvn(eta[k, , j], mu_tilde[k,,j], Sigma_tilde[j,,], isChol = FALSE, log = TRUE)
+          dmvn(eta[k, , j], rep(mu[k-1,j], N), Sigma[j,,], isChol = FALSE, log = TRUE)
         }
       )
     ) +
@@ -419,11 +429,25 @@ mcmc_fix <- function (y, locs, K, message = 100,
 
     for (j in 1:(J-1)){
       mu_prop[j] = rnorm(1, mu[k-1,j], mu_sigma_prop)
+      
+      Sigma[j,,] <- tau2[k] * correlation_function(D, theta[j,k,])
+      Sigma_chol[j,,] <- chol(Sigma[j,,])
+      Sigma_inv[j,,] <- chol2inv(Sigma_chol[j,,])
+
+    #   ## can make this much more efficient
+    #   Sigma_tilde[j,,] <- chol2inv(chol(Sigma_inv[j,,] + diag(Omega[k,,j])))
+    #   # mu_tilde <- c(Sigma_tilde %*% (Sigma_inv %*% rep(0, N) + kappa[, j]))
+    #   mu_tilde[k,,j] <- c(Sigma_tilde[j,,] %*% (Sigma_inv[j,,] %*% rep(mu[k-1,j], N) + kappa[, j]))
+    #   
+    #   # mu_tilde with mu_prop
+    #   mu_tilde_star[,j] <- c(Sigma_tilde_star[j,,] %*% (Sigma_inv_star[j,,] %*% rep(mu_prop[j], N) + kappa[, j]))
     }  
     mu_mh1 = sum(sapply(1:(J-1), function(j){
-      dmvn(eta[k,,j], rep(mu_prop[j], N), Sigma[j,,], log=TRUE)})) + 
+      # dmvn(eta[k,,j],  mu_tilde_star[,j], Sigma_tilde[j,,], log=TRUE)})) + 
+      dmvn(eta[k,,j],  rep(mu_prop[j], N), Sigma[j,,], log=TRUE)})) + 
       sum(dnorm(mu_prop, mu0, mu0_Sigma, log=TRUE))
     mu_mh2 = sum(sapply(1:(J-1), function(j){
+      # dmvn(eta[k,,j], mu_tilde[k,,j], Sigma_tilde[j,,], log=TRUE)})) + 
       dmvn(eta[k,,j], rep(mu[k-1,j], N), Sigma[j,,], log=TRUE)})) + 
       sum(dnorm(mu[k-1,], mu0, mu0_Sigma, log=TRUE))
     
