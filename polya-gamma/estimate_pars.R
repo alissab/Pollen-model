@@ -131,12 +131,12 @@ out <- mcmc_fix(y,
 #             sd_nu = 0.3,
 #             mean_range = 5,
 #             sd_range = 1)
-saveRDS(out, 'polya-gamma-posts_test2.RDS')
+saveRDS(out, 'polya-gamma-posts_test3.RDS')
 
 dat = list(y=y,
      locs=locs_scaled,
      rescale=rescale)
-saveRDS(dat, 'polya-gamma-dat2.RDS')
+saveRDS(dat, 'polya-gamma-dat3.RDS')
 
 
 #### SUMMARIZE PROCESS PARAMETER ####
