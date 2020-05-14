@@ -292,70 +292,70 @@ mcmc_fix <- function (y, locs, K, message = 100,
     ## MCMC STEP
     ##
     
-    # SS <- 0
-    # for (j in 1:(J-1)){
-    #   devs <- eta[k, ,j] - mu[k-1,j]
-    #   devs <- as.matrix(devs)
-    #   # devs <- kappa - eta[k, , ]
-    #   # doesn't actually depend on tau[k-1] because Sigma_Inv has a 1/tau[k-1] factor
-    #   # SS <- sum(devs * (tau[k-1]^2 * Sigma_inv[j,,] %*% as.matrix(devs)))
-    #   SS <- SS + t(devs) %*% (tau[k-1]^2 * Sigma_inv[j,,] %*% devs)
-    # }
-    # # tau2[k] <- 1 / rgamma(1, N * (J - 1) / 2 + alpha_tau,
-    # #                       SS / 2 + beta_tau)
-    # tau2[k] <- rinvgamma(1, N * (J - 1) / 2 + alpha_tau,
-    #                      SS / 2 + beta_tau)
-    # tau[k] <- sqrt(tau2[k])
-    # for (j in 1:(J-1)){
-    #   Sigma[j,,] <- tau[k]^2 * correlation_function(D, theta[j,k, ])
-    #   Sigma_chol[j,,] <- chol(Sigma[j,,])
-    #   Sigma_inv[j,,] <- chol2inv(Sigma_chol[j,,])
-    # }
-    
-    tau2_star_mean = log(tau2[k-1])
-    tau2_star = rlnorm(1, meanlog=tau2_star_mean, sdlog=tau2_star_sd)
-    
+    SS <- 0
     for (j in 1:(J-1)){
-      Sigma_star[j,,] <- tau2_star * correlation_function(D, theta[j,k,])
-      Sigma_chol_star[j,,] <- chol(Sigma_star[j,,])
-      Sigma_inv_star[j,,]  <- chol2inv(Sigma_chol_star[j,,])
+      devs <- eta[k, ,j] - mu[k-1,j]
+      devs <- as.matrix(devs)
+      # devs <- kappa - eta[k, , ]
+      # doesn't actually depend on tau[k-1] because Sigma_Inv has a 1/tau[k-1] factor
+      # SS <- sum(devs * (tau[k-1]^2 * Sigma_inv[j,,] %*% as.matrix(devs)))
+      SS <- SS + t(devs) %*% (tau[k-1]^2 * Sigma_inv[j,,] %*% devs)
     }
-    
-    tau_mh1 <- sum(
-      sapply(
-        1:(J-1),
-        function(j) {
-          dmvn(eta[k, , j], rep(mu[k-1,j], N), Sigma_star[j,,], isChol = FALSE, log = TRUE)
-        }
-      )
-    ) +
-      ## prior
-      dinvgamma(tau2_star, shape=alpha_tau, scale=beta_tau, log = TRUE) +
-      dlnorm(tau2[k-1], meanlog=log(tau2_star), sdlog=tau2_star_sd, log=TRUE)
-    
-    tau_mh2 <- sum(
-      sapply(
-        1:(J-1),
-        function(j) {
-          dmvn(eta[k, , j], rep(mu[k-1,j], N), Sigma[j,,], isChol = FALSE, log = TRUE)
-        }
-      )
-    ) +
-      ## prior
-      dinvgamma(tau2[k-1], shape=alpha_tau, scale=beta_tau, log = TRUE) +
-      dlnorm(tau2_star, meanlog=tau2_star_mean, sdlog=tau2_star_sd, log=TRUE)
-    
-    tau_mh <- exp(tau_mh1 - tau_mh2)
-    
-    if(tau_mh > runif(1, 0, 1)) {
-      tau2[k]   <- tau2_star
-      accept_tau <- accept_tau + 1
-      print("Accept tau")
-    } else {
-      tau2[k] <- tau2[k-1]
-    }
-    
+    # tau2[k] <- 1 / rgamma(1, N * (J - 1) / 2 + alpha_tau,
+    #                       SS / 2 + beta_tau)
+    tau2[k] <- rinvgamma(1, N * (J - 1) / 2 + alpha_tau,
+                         SS / 2 + beta_tau)
     tau[k] <- sqrt(tau2[k])
+    for (j in 1:(J-1)){
+      Sigma[j,,] <- tau[k]^2 * correlation_function(D, theta[j,k, ])
+      Sigma_chol[j,,] <- chol(Sigma[j,,])
+      Sigma_inv[j,,] <- chol2inv(Sigma_chol[j,,])
+    }
+    
+    # tau2_star_mean = log(tau2[k-1])
+    # tau2_star = rlnorm(1, meanlog=tau2_star_mean, sdlog=tau2_star_sd)
+    # 
+    # for (j in 1:(J-1)){
+    #   Sigma_star[j,,] <- tau2_star * correlation_function(D, theta[j,k,])
+    #   Sigma_chol_star[j,,] <- chol(Sigma_star[j,,])
+    #   Sigma_inv_star[j,,]  <- chol2inv(Sigma_chol_star[j,,])
+    # }
+    # 
+    # tau_mh1 <- sum(
+    #   sapply(
+    #     1:(J-1),
+    #     function(j) {
+    #       dmvn(eta[k, , j], rep(mu[k-1,j], N), Sigma_star[j,,], isChol = FALSE, log = TRUE)
+    #     }
+    #   )
+    # ) +
+    #   ## prior
+    #   dinvgamma(tau2_star, shape=alpha_tau, scale=beta_tau, log = TRUE) +
+    #   dlnorm(tau2[k-1], meanlog=log(tau2_star), sdlog=tau2_star_sd, log=TRUE)
+    # 
+    # tau_mh2 <- sum(
+    #   sapply(
+    #     1:(J-1),
+    #     function(j) {
+    #       dmvn(eta[k, , j], rep(mu[k-1,j], N), Sigma[j,,], isChol = FALSE, log = TRUE)
+    #     }
+    #   )
+    # ) +
+    #   ## prior
+    #   dinvgamma(tau2[k-1], shape=alpha_tau, scale=beta_tau, log = TRUE) +
+    #   dlnorm(tau2_star, meanlog=tau2_star_mean, sdlog=tau2_star_sd, log=TRUE)
+    # 
+    # tau_mh <- exp(tau_mh1 - tau_mh2)
+    # 
+    # if(tau_mh > runif(1, 0, 1)) {
+    #   tau2[k]   <- tau2_star
+    #   accept_tau <- accept_tau + 1
+    #   print("Accept tau")
+    # } else {
+    #   tau2[k] <- tau2[k-1]
+    # }
+    # 
+    # tau[k] <- sqrt(tau2[k])
     
     ##
     ## sample spatial process variance tau^2
